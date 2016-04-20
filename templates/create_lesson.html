@@ -1,0 +1,149 @@
+{%extends "base.html" %}
+{% block content %}
+
+	{% if auth %}
+		<form method="post" action="/newlesson">
+			
+			<label for="title">Title of the lesson</label>
+			<input type="text" name="title" value="{{title}}"/>
+			
+			
+			<label for="difficulty">Difficulty</label>
+			<select name="difficulty">
+				<option selected="selected" value="Easy">Easy</option>
+				<option value="Medium">Medium</option>
+				<option value="Hard">Hard</option>
+			</select>
+			
+
+			<div class="stories">
+				
+
+			</div>
+
+			<a href="javascript:lastStory()" onclick="addAStory()">Add another story to the lesson</a>
+
+			<div class="error">{{error}}</div>
+
+			<input type="submit" value="Send"/>
+		</form>
+	{% else %}
+		<p class="error">Vous n'êtes pas authentifié !</p>
+	{% endif %}
+
+	<script type="text/javascript">
+
+		function lastStory(){
+			var last = "#story" + $(".story").length;
+			$('html,body').animate({scrollTop: $(last).offset().top}, 'slow');
+		}
+
+		function addAStory(){
+			var number = $(".story").length + 1;
+
+			var newStory = "<div class=\"story\" id=\"story"+number+"\">\n"
+					+"<h2>Story "+number+"</h2>\n"
+					+"<label for=\"text\">Text of the story</label>\n"
+					+"<textarea name=\"text\">{{text}}</textarea>\n"
+					+"<div class=\"questions\">\n"
+						+"<h3>Questions</h3>\n"
+						+"<div class=\"vocabulary-questions\">\n"
+						+	"<h4>Vocabulary questions</h4>\n"
+						+	"<p>Write your text, and surround the word you want to make holes with \"[hole][/hole]\"</p>\n"
+						+"</div>\n"
+						+"<a href=\"#\" class=\"newVocabulary\" onclick=\"return false;\">Add a new vocabulary question</a>\n"
+						+"<div class=\"grammar-questions\">\n"
+						+	"<h4>Grammar questions</h4>\n"
+						+	"<p>Write your question, write your answers and select the right answer !</p>\n"
+						+"</div>"
+						+"<a href=\"#\" class=\"newGrammar\" onclick=\"return false;\">Add a new grammar question</a>\n"
+						+"<div class=\"comprehension-questions\" onclick=\"return false;\">\n"
+						+	"<h4>Comprehension questions</h4>\n"
+						+	"<p>Write your question and the answer you want. Think that the student has to find it exactly, so don't make it too tricky !</p>\n"
+						+"</div>\n"
+						+"<a href=\"#\" class=\"newComprehension\" onclick=\"return false;\">Add a new comprehension question</a>\n"
+					+"</div>\n"
+				+"</div>\n";
+
+				$(".stories").append(newStory);
+
+				$("#story"+number).find(".newVocabulary").click(function () {
+		     		var num = $(this).closest('.story').find('h2').text().split(" ")[1];
+		     		addVocabularyQuest(num);
+				});
+
+				$("#story"+number).find(".newGrammar").click(function () {
+		     		var num = $(this).closest('.story').find('h2').text().split(" ")[1];
+		     		addGrammarQuest(num);
+				});
+
+				$("#story"+number).find(".newComprehension").click(function () {
+		     		var num = $(this).closest('.story').find('h2').text().split(" ")[1];
+		     		addComprehensionQuest(num);
+				});
+
+				//On ajoute un epremière question de chaque thème à la nouvelle histoire
+				addVocabularyQuest(number);
+				addGrammarQuest(number);
+				addComprehensionQuest(number);
+		}
+
+		function addVocabularyQuest(num_story){
+			var number = $("#story"+num_story).find(".vocabulary-question").length + 1;
+
+			var id = "vocabulary-question"+num_story+""+number;
+
+			var newQuest = "<div class=\"vocabulary-question\" id=\""+id+"\">\n"
+				+ "<h5>Question "+number+"</h5>\n"
+				+ "<label for=\"vocabulary-question"+number+"\">The question :</label>\n"
+				+ "<textarea class=\"vocabulary-text\" name=\"vocabulary-question"+number+"\"></textarea>\n"
+				+ "</div>\n";
+
+			$("#story"+num_story).find(".vocabulary-questions").append(newQuest);
+
+			$('html,body').animate({scrollTop: $("#"+id).offset().top}, 'slow');
+		}
+
+		function addGrammarQuest(num_story){
+			var number = $("#story"+num_story).find(".grammar-question").length + 1;
+
+			var id = "grammar-question"+num_story+""+number;
+
+			var newQuest = "<div class=\"grammar-question\" id=\""+id+"\">\n"
+				+"<h5>Question "+number+"</h5>\n"
+				+"<label for=\"\">The question : </label>\n"
+				+"<input type=\"text\" name=\"grammar-question"+number+"\"/>"
+				+"<input type=\"radio\" name=\"answers\" value=\"1\"><input type=\"text\" name=\"grammar-answer"+number+"1\"/>\n"
+				+"<input type=\"radio\" name=\"answers\" value=\"2\"><input type=\"text\" name=\"grammar-answer"+number+"2\"/>\n"
+				+"<input type=\"radio\" name=\"answers\" value=\"3\"><input type=\"text\" name=\"grammar-answer"+number+"3\"/>\n"
+				+"<input type=\"radio\" name=\"answers\" value=\"4\"><input type=\"text\" name=\"grammar-answer"+number+"4\"/>\n"
+				+"</div>\n";
+
+			$("#story"+num_story).find(".grammar-questions").append(newQuest);
+
+			$('html,body').animate({scrollTop: $("#"+id).offset().top}, 'slow');
+		}
+
+		function addComprehensionQuest(num_story){
+			var number = $("#story"+num_story).find(".comprehension-question").length + 1;
+
+			var id = "comprehension-question"+num_story+""+number;
+
+			var newQuest = "<div class=\"comprehension-question\" id=\""+id+"\">\n"
+				+"<h5>Question "+number+"</h5>\n"
+				+"<label for=\"comprehension-question"+number+"\">Your question :</label>\n"
+				+"<input type=\"text\" name=\"comprehension-question"+number+"\"/>\n"
+				+"<label for=\"comprehension-answer"+number+"\">The answer</label><input type=\"text\" name=\"comprehension-answer"+number+"\"/>\n"
+				+"</div>\n";
+
+			$("#story"+num_story).find(".comprehension-questions").append(newQuest);
+
+			//$('html,body').animate({scrollTop: $("#"+id).offset().top}, 'slow');
+		}
+
+		//On ajoute la première histoire de la page
+		addAStory();
+
+	</script>
+
+{% endblock %}

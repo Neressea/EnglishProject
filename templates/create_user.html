@@ -7,8 +7,8 @@
 
 	<form method="post">
 		<label>
-			<div>Pseudo</div>
-			<input type="text" name="username" value="{{username}}"></input>
+			<div>Username</div>
+			<input type="text" name="username" value="{{username_temp}}"></input>
 		</label>
 
 		<label>
@@ -17,13 +17,8 @@
 		</label>
 
 		<label>
-			<div>Verify password</div>
+			<div>Password verification</div>
 			<input type="password" name="verify" value="{{verify}}"></input>
-		</label>
-
-		<label>
-			<div>Email</div>
-			<input type="text" name="email" value="{{email}}"></input>
 		</label>
 
 		<div class="error">{{error}}</div>

@@ -13,7 +13,10 @@ import random
 import string
 import logging
 
-  #To hash cookiesF
+#Variable globale accessible de partout
+appname = "English Project"
+
+  #To hash cookies
 SECRET = 'GFGIUOCKDSP54FSDEFEDSFGGEDGGF4HBFH46TR6YJ264FDDG5'
 def hash_str(s):
     return hmac.new(SECRET, s).hexdigest()

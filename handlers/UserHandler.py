@@ -14,6 +14,7 @@ import random
 import string
 import logging
 
+from Helpers import *
 from MainHandler import Handler
 from google.appengine.ext import db
 
@@ -21,13 +22,20 @@ template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), autoescape=True)
 
 class User(db.Model):
+	isAdmin = db.BooleanProperty(required=True)
 	username = db.StringProperty(required = True)
 	password = db.StringProperty(required = True)
-	email = db.EmailProperty(required = False)
+	grade_vocabulary_written = db.IntegerProperty(default = 0)
+	grade_grammar_written = db.IntegerProperty(default = 0)
+	grade_comprehension_written = db.IntegerProperty(default = 0)
+	grade_vocabulary_listen = db.IntegerProperty(default = 0)
+	grade_grammar_listen = db.IntegerProperty(default = 0)
+	grade_comprehension_listen = db.IntegerProperty(default = 0)
+	lessons_done = db.ListProperty(item_type = int) #Liste des IDs des leçons terminées
 
 class CreateUser(Handler):
-	def render_page(self, username="", password="", error=""):
-		self.render("create_user.html", username=username, password=password, error=error)
+	def render_page(self, username_temp="", password="", error=""):
+		self.render("create_user.html", username_temp=username_temp, password=password, error=error)
 
 	def get(self):
 		cookie = self.request.cookies.get('user_id')
@@ -61,7 +69,7 @@ class CreateUser(Handler):
 					self.render_page(username, password, error)
 				else:
 					hashpass = make_pw_hash(username, password)
-					usr = User(password = hashpass, username=username)
+					usr = User(isAdmin = False, password = hashpass, username=username)
 					usr.put()
 					#On ajoute le cookie
 					string_id = str(usr.key().id())

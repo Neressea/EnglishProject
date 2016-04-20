@@ -3,11 +3,27 @@
 <head>
 	<title>{{namepage}}</title>
 	<link rel="stylesheet" type="text/css" href="main.css" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 </head>
 <body>
 
 <div id="main">
-	<h1><a href="/" id="main_link">Home</a></h1>
+	{% if user %}
+		<nav>
+			<li><a href="/" id="main_link">{{sitename}}</a></li>
+			<li>Welcome home, {{user}}!</li>
+			<li><a href="/newlesson"> Post a new lesson !</a></li>
+			<li><a href="/training">Training</a></li>
+			<li><a href="/account">My Account</a></li>
+			<li><a href="/logout">Logout</a></li>
+		</nav>
+
+	{% else %}
+		<nav>
+			<li><a href="/" id="main_link">{{sitename}}</a></li>
+		</nav>
+	{% endif %}
+
 	{% block content %}
 	{% endblock %}
 </div>

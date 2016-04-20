@@ -13,7 +13,7 @@ import random
 import string
 import logging
 
-import Helpers
+from Helpers import *
 from MainHandler import Handler
 from google.appengine.ext import db
 
@@ -22,19 +22,7 @@ jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), a
 
 class Login(Handler):
 	def render_page(self, username="", password="", error=""):
-		self.render("login.html", username=username, password=password, error=error)
-
-	def get(self):
-		cookie = self.request.cookies.get('user_id')
-		auth = True
-		if cookie:
-			secure_val = check_secure_val(cookie)
-			if secure_val is None:
-				auth = False
-		else:
-			auth = False
-
-		self.render("login.html", auth=auth)
+		self.render("front.html", username=username, password=password, error=error, namepage = appname, sitename = appname)
 
 	def post(self):
 		username = self.request.get("username")
