@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+
+	<div class="story">
+		<h2 class="story-title">{{story.title}}</h2>
+		<pre class="story-content">{{story.content}}</pre>
+		<p class="created">Posté le {{story.created.strftime('%A %d %B %Y')}} à {{story.created.strftime('%H:%M:%S')}}</p>
+	</div>
+
+{% endblock %}
