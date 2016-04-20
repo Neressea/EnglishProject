@@ -1,0 +1,50 @@
+\documentclass[a4paper,11pt,final]{article}
+% Pour une impression recto verso, utilisez plutôt ce documentclass :
+%\documentclass[a4paper,11pt,twoside,final]{article}
+
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage[english,francais]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[pdftex]{graphicx}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage[french]{varioref}
+
+\usepackage{tocloft}
+\addtocontents{toc}{\cftpagenumbersoff{section}}
+\addtocontents{toc}{\cftpagenumbersoff{subsubsection}}
+
+\newcommand{\reporttitle}{Topo Head}     % Titre
+\newcommand{\reportauthor}{Nicolas \textsc{BÉDRINE}} % Auteur
+\newcommand{\reportsubject}{Rapport de projet C} % Sujet
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\setlength{\parskip}{1ex} % Espace entre les paragraphes
+
+\hypersetup{
+    pdftitle={\reporttitle},%
+    pdfauthor={\reportauthor},%
+    pdfsubject={\reportsubject},%
+}
+
+\begin{document}
+  \include{files/title}
+  \cleardoublepage % Dans le cas du recto verso, ajoute une page blanche si besoin
+  \renewcommand\thepage{}
+  \tableofcontents % Table des matières
+  \sloppy          % Justification moins stricte : des mots ne dépasseront pas des paragraphes
+  \cleardoublepage
+  \renewcommand\thepage{\arabic{page}}
+  \setcounter{page}{1}
+  
+  \include{files/presentation}
+  \cleardoublepage
+  \include{files/partie1}
+  \cleardoublepage
+  \include{files/partie2}
+  \cleardoublepage
+  
+  \thispagestyle{empty}
+  \include{files/references}
+\end{document}
+
