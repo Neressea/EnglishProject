@@ -44,8 +44,15 @@
 
 			var newStory = "<div class=\"story\" id=\"story"+number+"\">\n"
 					+"<h2>Story "+number+"</h2>\n"
-					+"<label for=\"story\">Text of the story</label>\n"
-					+"<textarea name=\"story\"></textarea>\n"
+					+"<label for=\"title_story"+number+"\">Title of the story</label>\n"
+					+"<input type=\"text\" name=\"title_story"+number+"\" id=\"title_story"+number+"\"/>"
+					+"<label for=\"type_of_story"+number+"\">Type of story :</label>"
+					+"<select name=\"type_of_story"+number+"\" id=\"type_of_story"+number+"\" class=\"type_of_story\">"
+					+"<option value=\"text\" selected=\"selected\">Text</option>"
+					+"<option value=\"video\">Video youtube</option>"
+					+"</select>"
+					+"<label for=\"story_text\">Text of the story</label>\n"
+					+"<textarea name=\"story_text\"></textarea>\n"
 					+"<div class=\"questions\">\n"
 						+"<h3>Questions</h3>\n"
 						+"<div class=\"vocabulary-questions\">\n"
@@ -81,6 +88,21 @@
 				$("#story"+number).find(".newComprehension").click(function () {
 		     		var num = $(this).closest('.story').find('h2').text().split(" ")[1];
 		     		addComprehensionQuest(num);
+				});
+
+				$("#story"+number).find(".type_of_story").change(function(){
+					var choice = $("#story"+number).find(".type_of_story option:selected").val();
+					if(choice == "video"){
+						$("#story"+number).find("label[for='story"+number+"']").text("Video for the story (put a youtube link)");
+						var name_story = $("#story"+number).find("textarea[name=\"story_text\"]").attr('name');
+						var textbox = $(document.createElement('input')).attr('name', name_story);
+						$("#story"+number).find("textarea[name=\"story_text\"]").replaceWith(textbox);
+					}else{
+						$("#story"+number).find("label[for='story_text']").text("Text of the story");
+						var name_story = $("#story"+number).find("input[name=\"story_text\"]").attr('name');
+						var textbox = $(document.createElement('textarea')).attr('name', name_story);
+						$("#story"+number).find("input[name=\"story_text\"]").replaceWith(textbox);
+					}
 				});
 
 				//On ajoute un epremière question de chaque thème à la nouvelle histoire

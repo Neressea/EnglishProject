@@ -11,9 +11,13 @@
 
 			<div class="story" id="story{{i}}" \>
 
-				<h2>Story {{i}}</h2>
-				
-				<p>{{story.text}}</p>
+				<h2>Story {{i}} : {{story.title}}</h2>
+
+				{% if story.type_of_story == "video" %}
+					<iframe width="640" height="360" src="{{story.text}}" frameborder="0" allowfullscreen></iframe>
+				{% else %}
+					<p>{{story.text}}</p>
+				{% endif %}
 
 				<h3>Questions</h3>
 

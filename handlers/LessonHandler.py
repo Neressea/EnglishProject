@@ -31,6 +31,8 @@ class Lesson(db.Model):
 
 class Story(db.Model):
 	id_lesson = db.IntegerProperty(required = True)
+	title = db.StringProperty(required = True)
+	type_of_story = db.StringProperty(required = True)
 	text = db.TextProperty(required = True)
 	questions_vocabulary = db.ListProperty(item_type = db.Text, required = True) #Texte à trous. "Mots troués" -> indiqués entre "<hole></hole>"
 	questions_grammar = db.ListProperty(item_type = db.Text, required = True) #QCM. Champs séparés par des "|". Premier champ -> question, second -> bonne réponse, et les autres : mauvaises réponses
@@ -65,10 +67,13 @@ class CreateLesson(Handler):
 		lesson.put()
 		id_lesson = lesson.key().id()
 
-		stories = self.request.get_all("story")
+		stories = self.request.get_all("story_text")
 
 		#On parcourt toutes les histoires
 		for i in range(0, len(stories)):
+			title_story = self.request.get("title_story"+str(i+1))
+			type_of_story = self.request.get("type_of_story"+str(i+1))
+
 			#On récupère les textes à trous en l'état
 			holes = self.request.get_all("vocabulary-question"+str(i+1)) # i = numéro de l'histoire
 			for j in range(0, len(holes)):
@@ -99,7 +104,7 @@ class CreateLesson(Handler):
 			logging.error(directs)
 
 			#On crée l'objet Story courant
-			stry = Story(id_lesson = id_lesson, text=stories[i], questions_vocabulary = holes, questions_grammar = QCMs, questions_comprehension = directs)
+			stry = Story(type_of_story = type_of_story, title=title_story, id_lesson = id_lesson, text=stories[i], questions_vocabulary = holes, questions_grammar = QCMs, questions_comprehension = directs)
 			stry.put()
 
 		time.sleep(0.5)
@@ -122,6 +127,9 @@ class LessonPage(Handler):
 		search = begin + r'.*' + end
 		
 		for i in range(0, len(stories)):
+			if stories[i].type_of_story == "video":
+				stories[i].text = re.sub(re.escape("watch?v="), "embed/", stories[i].text) 
+
 			for j in range(0, len(stories[i].questions_vocabulary)):
 				stories[i].questions_vocabulary[j] = re.sub(search, "<input type=\"text\" id=\"vocabulary-answer{{i}}{{j}}\" name=\"vocabulary-answer{{i}}{{j}}\"/>", stories[i].questions_vocabulary[j])
 				logging.error(stories[i].questions_vocabulary[j] )
