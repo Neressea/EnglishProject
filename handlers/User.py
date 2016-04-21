@@ -20,10 +20,7 @@ class User(db.Model):
 	isAdmin = db.BooleanProperty(required=True)
 	username = db.StringProperty(required = True)
 	password = db.StringProperty(required = True)
-	grade_vocabulary_written = db.IntegerProperty(default = 0)
-	grade_grammar_written = db.IntegerProperty(default = 0)
-	grade_comprehension_written = db.IntegerProperty(default = 0)
-	grade_vocabulary_listen = db.IntegerProperty(default = 0)
-	grade_grammar_listen = db.IntegerProperty(default = 0)
-	grade_comprehension_listen = db.IntegerProperty(default = 0)
+	grade_vocabulary = db.IntegerProperty(default = 0)
+	grade_grammar = db.IntegerProperty(default = 0)
+	grade_comprehension = db.IntegerProperty(default = 0)
 	lessons_done = db.ListProperty(item_type = int) #Liste des IDs des leçons terminées

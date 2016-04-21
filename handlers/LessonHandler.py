@@ -18,6 +18,8 @@ import re
 from handlers.Helpers import *
 from MainHandler import Handler
 from google.appengine.ext import db
+from handlers.UserHandler import User
+from xml.dom import minidom
 
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), autoescape=True)
@@ -89,8 +91,6 @@ class CreateLesson(Handler):
 				for k in range(0, len(QCMs_responses)):
 					QCMs[j] = db.Text(QCMs[j] + "|" + QCMs_responses[k])
 
-			logging.error(QCMs)
-
 			#On récupère les questions directes
 			directs = self.request.get_all("comprehension-question"+str(i+1))
 
@@ -101,8 +101,6 @@ class CreateLesson(Handler):
 			for j in range(0, len(directs)):
 				directs[j] = db.Text(directs[j] + "|" + directs_responses[j])
 
-			logging.error(directs)
-
 			#On crée l'objet Story courant
 			stry = Story(type_of_story = type_of_story, title=title_story, id_lesson = id_lesson, text=stories[i], questions_vocabulary = holes, questions_grammar = QCMs, questions_comprehension = directs)
 			stry.put()
@@ -110,6 +108,113 @@ class CreateLesson(Handler):
 		time.sleep(0.5)
 
 		self.redirect('/'+str(id_lesson))
+
+class CheckHandler(Handler):
+	def post(self):
+		cookie = self.request.cookies.get('user_id')
+		if not cookie:
+			self.redirect('/')
+
+		#On récupère l'utilisateur authentifié
+		user_id = int(cookie.split("|")[0])
+		user = User.get_by_id(user_id)
+
+		#we get the id oh the lesson
+		lesson_id = self.request.get('id-lesson')
+
+		#On récupère la leçon
+		lesson = Lesson.get_by_id(int(lesson_id))
+
+		#we get all the relative stories
+		stories_correction = db.GqlQuery("SELECT * FROM Story WHERE id_lesson = :1", int(lesson_id)).fetch(100)
+
+		#réponses correctes
+		holes = []
+		QCMs = []
+		comprehensions = []
+
+		#réponses reçues
+		vcbl_ans=[]
+		gramm_ans=[]
+		cpr_ans=[]
+
+		#List representing the answers. 1 if the answer was ok, else 0.
+		vocabulary_results = []
+		grammar_results = []
+		comprehension_results = []
+
+		#Tableau 2D. Contient toutes les corrections de vocabulaire à afficher.
+		vocabulary_parts = []
+
+		#On parcourt toutes les histoires
+		for i in range(0, len(stories_correction)):
+
+			#On récupère les textes à trous en l'état
+			holes = stories_correction[i].questions_vocabulary
+
+			for j in range(0, len(holes)):
+				#On compare chaque réponse au résultat attendu
+				vocable_fields = self.request.get_all("vocabulary-answer%d%d" % (i+1, j+1))
+				begin = re.escape("[hole]")
+				end = re.escape("[/hole]")
+				search = begin + '.*?' + end
+				to_find = re.findall(search, holes[j])
+				
+				#On split et on enlève les trous
+				sentences = re.split(search, holes[j])
+				vocabulary_parts.append("")
+
+				for k in range(0, len(vocable_fields)):
+					vocabulary_parts[i+j] += sentences[k]
+					vcbl_ans.append(vocable_fields[k])
+					to_find[k] = to_find[k].replace('[hole]', '')
+					to_find[k] = to_find[k].replace('[/hole]', '')
+
+					if to_find[k] == vcbl_ans[i+j+k]:
+						vocabulary_results.append(1)
+						vocabulary_parts[i+j]+="<input class=\"answer_true\" type=\"text\" name=\"pseudo\" value=\""+vcbl_ans[i+j+k]+"\" disabled=\"disabled\" />"
+					else:
+						vocabulary_results.append(0)
+						vocabulary_parts[i+j]+="<input class=\"answer_false\" type=\"text\" name=\"pseudo\" value=\""+vcbl_ans[i+j+k]+"\" disabled=\"disabled\" />"
+						vocabulary_parts[i+j]+="<input class=\"answer_true\" type=\"text\" name=\"pseudo\" value=\""+to_find[k]+"\" disabled=\"disabled\" />"
+
+			#On parcourt toutes les QCMs
+			QCMs = stories_correction[i].questions_grammar
+			for j in range(0, len(QCMs)):
+				#On récupère la réponse à la question courante
+				gramm_ans.append(self.request.get("grammar-answer%d%d" % (i+1, j+1)))
+				grammar_results.append(1 if QCMs[j].split("|")[1] == gramm_ans[i+j] else 0)
+
+			#On parcourt toutes les questions directes
+			comprehensions = stories_correction[i].questions_comprehension
+			for j in range(0, len(comprehensions)):
+				#On récupère la réponse à la question courante
+				cpr_ans.append(self.request.get("comprehension-answer%d%d" % (i+1, j+1)))
+				comprehension_results.append(1 if comprehensions[j].split("|")[1] == cpr_ans[i+j] else 0)
+
+			if stories_correction[i].type_of_story == "video":
+				stories_correction[i].text = re.sub(re.escape("watch?v="), "embed/", stories_correction[i].text) 
+
+		percentages = [0, 0, 0]
+		percentages[0] = ((sum(vocabulary_results) +0.0) / len(vocabulary_results)) * 100 if len(vocabulary_results) > 0 else 0
+		percentages[1] = (sum(grammar_results) +0.0) / len(grammar_results) * 100
+		percentages[2] = (sum(comprehension_results) +0.0) / len(comprehension_results) * 100
+
+		#On met à jour les notes
+		user.grade_vocabulary = int((user.grade_vocabulary * len(user.lessons_done) + percentages[0]) / (len(user.lessons_done) + 1))
+		user.grade_grammar = int((user.grade_grammar * len(user.lessons_done) + percentages[1]) / (len(user.lessons_done) + 1)) 
+		user.grade_comprehension = int((user.grade_comprehension * len(user.lessons_done) + percentages[2]) / (len(user.lessons_done) + 1)) 
+
+		#On met à jour l'utilisateur
+		user.lessons_done.append(int(lesson_id))
+
+		user.put()
+
+		logging.error(str(user.grade_vocabulary)+"  "+str(user.grade_grammar)+"  "+str(user.grade_comprehension))
+
+		#On redirige sur la page de résultats
+		self.render("results.html", lesson=lesson, stories=stories_correction, percentages=percentages, vocabulary_answers=holes, vocabulary_parts = vocabulary_parts,
+			grammar_answers=QCMs, comprehension_answers=comprehensions, vocabulary_got=vcbl_ans, grammar_got=gramm_ans, comprehension_got=cpr_ans)
 
 class LessonPage(Handler):
 	def get(self, id):
@@ -124,14 +229,13 @@ class LessonPage(Handler):
 
 		begin = re.escape("[hole]")
 		end = re.escape("[/hole]")
-		search = begin + r'.*' + end
-		
+		search = begin + '.*?' + end
+
 		for i in range(0, len(stories)):
 			if stories[i].type_of_story == "video":
 				stories[i].text = re.sub(re.escape("watch?v="), "embed/", stories[i].text) 
 
 			for j in range(0, len(stories[i].questions_vocabulary)):
-				stories[i].questions_vocabulary[j] = re.sub(search, "<input type=\"text\" id=\"vocabulary-answer{{i}}{{j}}\" name=\"vocabulary-answer{{i}}{{j}}\"/>", stories[i].questions_vocabulary[j])
-				logging.error(stories[i].questions_vocabulary[j] )
+				stories[i].questions_vocabulary[j] = re.sub(search, "<input type=\"text\" id=\"vocabulary-answer%d%d\" name=\"vocabulary-answer%d%d\"/>" % (i+1, j+1, i+1, j+1), stories[i].questions_vocabulary[j])
 
 		self.render("lesson.html", lesson=lesson, stories=stories)
