@@ -17,37 +17,17 @@ import logging
 from Helpers import *
 from MainHandler import Handler
 from google.appengine.ext import db
+from handlers.User import User
 
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), autoescape=True)
-
-class User(db.Model):
-	isAdmin = db.BooleanProperty(required=True)
-	username = db.StringProperty(required = True)
-	password = db.StringProperty(required = True)
-	grade_vocabulary_written = db.IntegerProperty(default = 0)
-	grade_grammar_written = db.IntegerProperty(default = 0)
-	grade_comprehension_written = db.IntegerProperty(default = 0)
-	grade_vocabulary_listen = db.IntegerProperty(default = 0)
-	grade_grammar_listen = db.IntegerProperty(default = 0)
-	grade_comprehension_listen = db.IntegerProperty(default = 0)
-	lessons_done = db.ListProperty(item_type = int) #Liste des IDs des leçons terminées
 
 class CreateUser(Handler):
 	def render_page(self, username_temp="", password="", error=""):
 		self.render("create_user.html", username_temp=username_temp, password=password, error=error)
 
 	def get(self):
-		cookie = self.request.cookies.get('user_id')
-		auth = True
-		if cookie:
-			secure_val = check_secure_val(cookie)
-			if secure_val is None:
-				auth = False
-		else:
-			auth = False
-
-		self.render("create_user.html", auth=auth)
+		self.render("create_user.html")
 
 	def post(self):
 		username = self.request.get("username")

@@ -22,7 +22,7 @@ jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), a
 
 class Login(Handler):
 	def render_page(self, username="", password="", error=""):
-		self.render("front.html", username=username, password=password, error=error, namepage = appname, sitename = appname)
+		self.render("front.html", username=username, password=password, error=error)
 
 	def post(self):
 		username = self.request.get("username")

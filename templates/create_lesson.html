@@ -1,4 +1,5 @@
-{%extends "base.html" %}
+{% extends "base.html" %}
+
 {% block content %}
 
 	{% if auth %}
@@ -43,8 +44,8 @@
 
 			var newStory = "<div class=\"story\" id=\"story"+number+"\">\n"
 					+"<h2>Story "+number+"</h2>\n"
-					+"<label for=\"text\">Text of the story</label>\n"
-					+"<textarea name=\"text\">{{text}}</textarea>\n"
+					+"<label for=\"story\">Text of the story</label>\n"
+					+"<textarea name=\"story\"></textarea>\n"
 					+"<div class=\"questions\">\n"
 						+"<h3>Questions</h3>\n"
 						+"<div class=\"vocabulary-questions\">\n"
@@ -83,28 +84,29 @@
 				});
 
 				//On ajoute un epremière question de chaque thème à la nouvelle histoire
-				addVocabularyQuest(number);
-				addGrammarQuest(number);
-				addComprehensionQuest(number);
+				addVocabularyQuest(number, false);
+				addGrammarQuest(number, false);
+				addComprehensionQuest(number, false);
 		}
 
-		function addVocabularyQuest(num_story){
+		function addVocabularyQuest(num_story, scroll = true){
 			var number = $("#story"+num_story).find(".vocabulary-question").length + 1;
 
 			var id = "vocabulary-question"+num_story+""+number;
 
 			var newQuest = "<div class=\"vocabulary-question\" id=\""+id+"\">\n"
 				+ "<h5>Question "+number+"</h5>\n"
-				+ "<label for=\"vocabulary-question"+number+"\">The question :</label>\n"
-				+ "<textarea class=\"vocabulary-text\" name=\"vocabulary-question"+number+"\"></textarea>\n"
+				+ "<label for=\"vocabulary-question"+num_story+"\">The question :</label>\n"
+				+ "<textarea class=\"vocabulary-text\" name=\"vocabulary-question"+num_story+"\"></textarea>\n"
 				+ "</div>\n";
 
 			$("#story"+num_story).find(".vocabulary-questions").append(newQuest);
 
-			$('html,body').animate({scrollTop: $("#"+id).offset().top}, 'slow');
+			if(scroll)
+				$('html,body').animate({scrollTop: $("#"+id).offset().top}, 'slow');
 		}
 
-		function addGrammarQuest(num_story){
+		function addGrammarQuest(num_story, scroll = true){
 			var number = $("#story"+num_story).find(".grammar-question").length + 1;
 
 			var id = "grammar-question"+num_story+""+number;
@@ -112,33 +114,35 @@
 			var newQuest = "<div class=\"grammar-question\" id=\""+id+"\">\n"
 				+"<h5>Question "+number+"</h5>\n"
 				+"<label for=\"\">The question : </label>\n"
-				+"<input type=\"text\" name=\"grammar-question"+number+"\"/>"
-				+"<input type=\"radio\" name=\"answers\" value=\"1\"><input type=\"text\" name=\"grammar-answer"+number+"1\"/>\n"
-				+"<input type=\"radio\" name=\"answers\" value=\"2\"><input type=\"text\" name=\"grammar-answer"+number+"2\"/>\n"
-				+"<input type=\"radio\" name=\"answers\" value=\"3\"><input type=\"text\" name=\"grammar-answer"+number+"3\"/>\n"
-				+"<input type=\"radio\" name=\"answers\" value=\"4\"><input type=\"text\" name=\"grammar-answer"+number+"4\"/>\n"
+				+"<input type=\"text\" name=\"grammar-question"+num_story+"\"/>"
+				+"<input type=\"radio\" name=\"answers\" value=\"1\"><input type=\"text\" name=\"grammar-answer"+num_story+""+number+"\"/>\n"
+				+"<input type=\"radio\" name=\"answers\" value=\"2\"><input type=\"text\" name=\"grammar-answer"+num_story+""+number+"\"/>\n"
+				+"<input type=\"radio\" name=\"answers\" value=\"3\"><input type=\"text\" name=\"grammar-answer"+num_story+""+number+"\"/>\n"
+				+"<input type=\"radio\" name=\"answers\" value=\"4\"><input type=\"text\" name=\"grammar-answer"+num_story+""+number+"\"/>\n"
 				+"</div>\n";
 
 			$("#story"+num_story).find(".grammar-questions").append(newQuest);
 
-			$('html,body').animate({scrollTop: $("#"+id).offset().top}, 'slow');
+			if(scroll)
+				$('html,body').animate({scrollTop: $("#"+id).offset().top}, 'slow');
 		}
 
-		function addComprehensionQuest(num_story){
+		function addComprehensionQuest(num_story, scroll = true){
 			var number = $("#story"+num_story).find(".comprehension-question").length + 1;
 
 			var id = "comprehension-question"+num_story+""+number;
 
 			var newQuest = "<div class=\"comprehension-question\" id=\""+id+"\">\n"
 				+"<h5>Question "+number+"</h5>\n"
-				+"<label for=\"comprehension-question"+number+"\">Your question :</label>\n"
-				+"<input type=\"text\" name=\"comprehension-question"+number+"\"/>\n"
-				+"<label for=\"comprehension-answer"+number+"\">The answer</label><input type=\"text\" name=\"comprehension-answer"+number+"\"/>\n"
+				+"<label for=\"comprehension-question"+num_story+"\">Your question :</label>\n"
+				+"<input type=\"text\" name=\"comprehension-question"+num_story+"\"/>\n"
+				+"<label for=\"comprehension-answer"+num_story+"\">The answer</label><input type=\"text\" name=\"comprehension-answer"+num_story+"\"/>\n"
 				+"</div>\n";
 
 			$("#story"+num_story).find(".comprehension-questions").append(newQuest);
 
-			//$('html,body').animate({scrollTop: $("#"+id).offset().top}, 'slow');
+			if(scroll)
+				$('html,body').animate({scrollTop: $("#"+id).offset().top}, 'slow');
 		}
 
 		//On ajoute la première histoire de la page

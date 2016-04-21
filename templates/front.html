@@ -2,7 +2,14 @@
 {% block content %}
 
 	{% if user %}
-		
+		{% for lesson in lessons %}
+			<div class="lesson">
+				<h2><a href="/{{lesson.key().id()}}">{{lesson.title}}</a></h2>
+				<p>{{lesson.difficulty}}</p>
+				<p class="created">Posté le {{lesson.created.strftime('%A %d %B %Y')}} à {{lesson.created.strftime('%H:%M:%S')}}</p>
+				<p class="created">Modifié la dernière fois le {{lesson.created.strftime('%A %d %B %Y')}} à {{lesson.created.strftime('%H:%M:%S')}}</p>
+			</div>
+		{% endfor %}
 	{% else %}
 		<form method="post" action="/login">
 			<label>

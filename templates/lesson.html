@@ -1,10 +1,86 @@
 {% extends "base.html" %}
 {% block content %}
 
-	<div class="story">
-		<h2 class="story-title">{{story.title}}</h2>
-		<pre class="story-content">{{story.content}}</pre>
-		<p class="created">Posté le {{story.created.strftime('%A %d %B %Y')}} à {{story.created.strftime('%H:%M:%S')}}</p>
-	</div>
+	<form class="lesson" method="post" action="/check">
+		<h1 class="lesson-title">{{lesson.title}}</h1>
+		<p>{{lesson.difficulty}}</p>
+
+		{% set i = 0 %}
+		{% for story in stories %}
+			{% set i = i + 1 %}
+
+			<div class="story" id="story{{i}}" \>
+
+				<h2>Story {{i}}</h2>
+				
+				<p>{{story.text}}</p>
+
+				<h3>Questions</h3>
+
+				<div class="vocabulary-questions">
+					<h4>Vocabulary questions</h4>
+					<p>Fill in the blanks !</p>
+					{% set j = 0 %}
+
+					{% for vcble in story.questions_vocabulary %}
+						{% set j = j+1 %}
+						<h5>Question {{j}}</h5>
+
+						<div class="vocabulary-question" id="vocabulary-question{{i}}{{j}}">
+							<p>{{vcble | safe}}</p>
+						</div>
+
+					{% endfor %}
+				</div>
+
+				<div class="grammar-questions">
+					<h4>Grammar questions</h4>
+					{% set j = 0 %}
+
+					{% for gramm in story.questions_grammar %}
+						{% set j = j+1 %}
+						<h5>Question {{j}}</h5>
+
+						<div class="grammar-question" id="grammar-question{{i}}{{j}}">
+							{% set answers = gramm.split("|") %}
+
+							<p>{{gramm.split("|")[0]}}</p>
+
+							{% set a = answers.pop(0) %}
+
+							<label for="grammar-answer{{i}}{{j}}">Your answer: </label>
+
+							{% for ans in answers %}
+								<input type="radio" name="answers{{i}}{{j}}" value="{{ans}}">{{ans}}</input>
+							{% endfor %}
+						</div>
+
+					{% endfor %}
+				</div>
+
+				<div class="comprehension-questions">
+					<h4>Comprehension questions</h4>
+					{% set j = 0 %}
+
+					{% for compr in story.questions_comprehension %}
+						{% set j = j+1 %}
+						<h5>Question {{j}}</h5>
+
+						<div class="comprehension-question" id="comprehension-question{{i}}{{j}}">
+							<p>{{compr.split("|")[0]}}</p>
+							<label for="comprehension-answer{{i}}{{j}}">Your answer: </label><input type="text" name="comprehension-answer{{i}}{{j}}" id="comprehension-answer{{i}}{{j}}" />
+						</div>
+
+					{% endfor %}
+				</div>
+			</div>
+
+		{% endfor %}
+
+		<input type="submit" value="Check !"/>
+
+		<p class="created">Posté le {{lesson.created.strftime('%A %d %B %Y')}} à {{lesson.created.strftime('%H:%M:%S')}}</p>
+		<p class="created">Modifié la dernière fois le {{lesson.created.strftime('%A %d %B %Y')}} à {{lesson.created.strftime('%H:%M:%S')}}</p>
+	</form>
 
 {% endblock %}

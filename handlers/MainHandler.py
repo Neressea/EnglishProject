@@ -11,6 +11,9 @@ import sys
 import webapp2
 import jinja2
 
+from handlers.Helpers import *
+from handlers.User import User
+
 template_dir = os.path.join(os.path.dirname(__file__), '../templates')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), autoescape=True)
 
@@ -23,4 +26,22 @@ class Handler(webapp2.RequestHandler):
 		return t.render(params)
 
     def render(self, template, **kw):
-    	self.write(self.render_str(template, **kw))
+		kw["sitename"] = appname
+		kw["namepage"] = appname
+		cookie = self.request.cookies.get('user_id')
+		auth = True
+		username = None
+		if cookie:
+			secure_val = check_secure_val(cookie)
+			if secure_val is None:
+				auth = False
+			else:
+				id = int(secure_val)
+				username = User.get_by_id(id).username
+		else:
+			auth = False
+
+		if username:
+			kw["user"] = username
+
+		self.write(self.render_str(template, **kw))

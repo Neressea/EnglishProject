@@ -28,22 +28,9 @@ from handlers.UserHandler import *
 
 class MainPage(Handler):
 	def get(self):
-		#Appname définie dans Helpers
-
-		cookie = self.request.cookies.get('user_id')
-		auth = True
-		username = None
-		if cookie:
-			secure_val = check_secure_val(cookie)
-			if secure_val is None:
-				auth = False
-			else:
-				id = int(secure_val)
-				username = User.get_by_id(id).username
-		else:
-			auth = False
-
-		self.render("front.html", sitename = appname, namepage = appname, auth = auth, user = username)
+		lessons = Lesson.all().order("-created")
+		lessons = list(lessons)
+		self.render("front.html", lessons=lessons)
 
 app = webapp2.WSGIApplication([('/', MainPage),
 	('/newlesson/?', CreateLesson),
