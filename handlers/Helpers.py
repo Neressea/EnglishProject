@@ -14,7 +14,7 @@ import string
 import logging
 
 #Variable globale accessible de partout
-appname = "English Project"
+appname = "Question Teller"
 
   #To hash cookies
 SECRET = 'GFGIUOCKDSP54FSDEFEDSFGGEDGGF4HBFH46TR6YJ264FDDG5'

@@ -25,6 +25,7 @@ from handlers.MainHandler import *
 from handlers.SessionHandler import * 
 from handlers.LessonHandler import * 
 from handlers.UserHandler import *
+from handlers.AccountHandler import *
 
 class MainPage(Handler):
 	def get(self):
@@ -39,5 +40,6 @@ app = webapp2.WSGIApplication([('/', MainPage),
 	(r'/signup/?', CreateUser),
 	(r'/logout/?', Logout),
 	(r'/check/?', CheckHandler),
-	(r'/account/?', AccountHandler)],
+	(r'/account/?', AccountHandler),
+	(r'/training/?', TrainingHandler)],
 	debug=True)

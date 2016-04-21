@@ -2,4 +2,23 @@
 
 {% block content %}
 
+	{% if user %}
+
+		<p>Welcome home, {{user.username}}!</p>
+		<p>This is your account. You can access your progression from here. </p>
+		<div>
+			<span>Vocabulary : {{user.grade_vocabulary}}%</span>
+			<span>Grammar : {{user.grade_grammar}}%</span>
+			<span>Comprehension : {{user.grade_comprehension}}%</span>
+		</div>
+
+		<div id="lessons">
+			{% for lesson in lessons %}
+				<a href="/{{lesson.key().id()}}">{{lesson.title}}</a>
+			{% endfor %}
+		</div>
+	{% else %}
+		<p class="error">You must be authentified.</p>
+	{% endif %}
+
 {% endblock %}

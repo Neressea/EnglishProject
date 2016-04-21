@@ -3,6 +3,15 @@
 
 	<form class="lesson" method="post" action="/check">
 		<input type="hidden" name="id-lesson" value="{{lesson.key().id()}}" />
+
+		{% if training %}
+			{% if training == "FAIL" %}
+				<p>We are sorry, but we did'nt find a lesson for your needs that you haven't done. So here is another lesson.</p>
+			{% else %}
+				<p>Welcome to our training session, sir! We have the feeling that you have to improve your {{training}} skills, so here is a lesson we chose just for you !</p>
+			{% endif %}
+		{% endif %}
+
 		<h1 class="lesson-title">{{lesson.title}}</h1>
 		<p>{{lesson.difficulty}}</p>
 

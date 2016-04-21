@@ -29,17 +29,14 @@ class Handler(webapp2.RequestHandler):
 		kw["sitename"] = appname
 		kw["namepage"] = appname
 		cookie = self.request.cookies.get('user_id')
-		auth = True
-		username = None
+		user = None
 		if cookie:
 			secure_val = check_secure_val(cookie)
 			if secure_val:
 				id = int(secure_val)
 				user = User.get_by_id(id)
-				if user:
-					username = user.username
 
-		if username:
-			kw["user"] = username
+		if user:
+			kw["user"] = user
 
 		self.write(self.render_str(template, **kw))

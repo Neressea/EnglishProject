@@ -30,6 +30,7 @@ class Lesson(db.Model):
 	title = db.StringProperty(required = True)
 	created = db.DateTimeProperty(auto_now_add = True)
 	last_modified = db.DateTimeProperty(auto_now = True)
+	dominant = db.StringProperty(choices=set(["Vocabulary", "Grammar", "Comprehension"]))
 
 class Story(db.Model):
 	id_lesson = db.IntegerProperty(required = True)
@@ -71,6 +72,8 @@ class CreateLesson(Handler):
 
 		stories = self.request.get_all("story_text")
 
+		nb_questions = [0, 0, 0]
+
 		#On parcourt toutes les histoires
 		for i in range(0, len(stories)):
 			title_story = self.request.get("title_story"+str(i+1))
@@ -79,6 +82,7 @@ class CreateLesson(Handler):
 			#On récupère les textes à trous en l'état
 			holes = self.request.get_all("vocabulary-question"+str(i+1)) # i = numéro de l'histoire
 			for j in range(0, len(holes)):
+				nb_questions[0] += 1
 				holes[j] = db.Text(holes[j])
 
 			#On récupère les QCMs
@@ -86,6 +90,7 @@ class CreateLesson(Handler):
 
 			#On récupère les réponses de chaque QCM
 			for j in range(0, len(QCMs)):
+				nb_questions[1] += 1
 				QCMs_responses = self.request.get_all("grammar-answer"+str(i+1)+str(j+1))
 				#On parcourt ces réponses et on combine le tout
 				for k in range(0, len(QCMs_responses)):
@@ -99,11 +104,22 @@ class CreateLesson(Handler):
 
 			#On combine les deux
 			for j in range(0, len(directs)):
+				nb_questions[2] += 1
 				directs[j] = db.Text(directs[j] + "|" + directs_responses[j])
 
 			#On crée l'objet Story courant
 			stry = Story(type_of_story = type_of_story, title=title_story, id_lesson = id_lesson, text=stories[i], questions_vocabulary = holes, questions_grammar = QCMs, questions_comprehension = directs)
 			stry.put()
+
+		#On MàJ la dominante de la leçon
+		if nb_questions[0] > nb_questions[1] and nb_questions[0]>nb_questions[2]:
+			lesson.dominant = "Vocabulary"
+		elif nb_questions[1] > nb_questions[0] and nb_questions[1]>nb_questions[2]:
+			lesson.dominant = "Grammar"
+		else:
+			lesson.dominant = "Comprehension"
+
+		lesson.put()
 
 		time.sleep(0.5)
 
@@ -170,12 +186,14 @@ class CheckHandler(Handler):
 					to_find[k] = to_find[k].replace('[hole]', '')
 					to_find[k] = to_find[k].replace('[/hole]', '')
 
-					if to_find[k] == vcbl_ans[i+j+k]:
+					logging.error(vcbl_ans[len(vcbl_ans)-1])
+
+					if to_find[k] == vcbl_ans[len(vcbl_ans)-1]:
 						vocabulary_results.append(1)
-						vocabulary_parts[i+j]+="<input class=\"answer_true\" type=\"text\" name=\"pseudo\" value=\""+vcbl_ans[i+j+k]+"\" disabled=\"disabled\" />"
+						vocabulary_parts[i+j]+="<input class=\"answer_true\" type=\"text\" name=\"pseudo\" value=\""+vcbl_ans[len(vcbl_ans)-1]+"\" disabled=\"disabled\" />"
 					else:
 						vocabulary_results.append(0)
-						vocabulary_parts[i+j]+="<input class=\"answer_false\" type=\"text\" name=\"pseudo\" value=\""+vcbl_ans[i+j+k]+"\" disabled=\"disabled\" />"
+						vocabulary_parts[i+j]+="<input class=\"answer_false\" type=\"text\" name=\"pseudo\" value=\""+vcbl_ans[len(vcbl_ans)-1]+"\" disabled=\"disabled\" />"
 						vocabulary_parts[i+j]+="<input class=\"answer_true\" type=\"text\" name=\"pseudo\" value=\""+to_find[k]+"\" disabled=\"disabled\" />"
 
 			#On parcourt toutes les QCMs
@@ -205,16 +223,15 @@ class CheckHandler(Handler):
 		user.grade_grammar = int((user.grade_grammar * len(user.lessons_done) + percentages[1]) / (len(user.lessons_done) + 1)) 
 		user.grade_comprehension = int((user.grade_comprehension * len(user.lessons_done) + percentages[2]) / (len(user.lessons_done) + 1)) 
 
-		#On met à jour l'utilisateur
-		user.lessons_done.append(int(lesson_id))
+		#On met à jour l'utilisateur que si la leçon n'existe pas déjà
+		if int(lesson_id) not in user.lessons_done:
+			user.lessons_done.append(int(lesson_id))
 
 		user.put()
 
-		logging.error(str(user.grade_vocabulary)+"  "+str(user.grade_grammar)+"  "+str(user.grade_comprehension))
-
 		#On redirige sur la page de résultats
 		self.render("results.html", lesson=lesson, stories=stories_correction, percentages=percentages, vocabulary_answers=holes, vocabulary_parts = vocabulary_parts,
-			grammar_answers=QCMs, comprehension_answers=comprehensions, vocabulary_got=vcbl_ans, grammar_got=gramm_ans, comprehension_got=cpr_ans)
+			grammar_answers=QCMs, comprehension_answers=comprehensions, grammar_got=gramm_ans, comprehension_got=cpr_ans)
 
 class LessonPage(Handler):
 	def get(self, id):
