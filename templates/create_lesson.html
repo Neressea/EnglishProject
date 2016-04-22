@@ -62,7 +62,7 @@
 						+"<a href=\"#\" class=\"newVocabulary\" onclick=\"return false;\">Add a new vocabulary question</a>\n"
 						+"<div class=\"grammar-questions\">\n"
 						+	"<h4>Grammar questions</h4>\n"
-						+	"<p>Write your question, write your answers and select the right answer !</p>\n"
+						+	"<p>Write your question, write the correct answer and then wrong answers!</p>\n"
 						+"</div>"
 						+"<a href=\"#\" class=\"newGrammar\" onclick=\"return false;\">Add a new grammar question</a>\n"
 						+"<div class=\"comprehension-questions\" onclick=\"return false;\">\n"
@@ -135,12 +135,11 @@
 
 			var newQuest = "<div class=\"grammar-question\" id=\""+id+"\">\n"
 				+"<h5>Question "+number+"</h5>\n"
-				+"<label for=\"\">The question : </label>\n"
-				+"<input type=\"text\" name=\"grammar-question"+num_story+"\"/>"
-				+"<input type=\"radio\" name=\"answers\" value=\"1\"><input type=\"text\" name=\"grammar-answer"+num_story+""+number+"\"/>\n"
-				+"<input type=\"radio\" name=\"answers\" value=\"2\"><input type=\"text\" name=\"grammar-answer"+num_story+""+number+"\"/>\n"
-				+"<input type=\"radio\" name=\"answers\" value=\"3\"><input type=\"text\" name=\"grammar-answer"+num_story+""+number+"\"/>\n"
-				+"<input type=\"radio\" name=\"answers\" value=\"4\"><input type=\"text\" name=\"grammar-answer"+num_story+""+number+"\"/>\n"
+				+"<label for=\"\">The question : </label><input type=\"text\" name=\"grammar-question"+num_story+"\"/><br />"
+				+"<label>The correct answer : </label><input type=\"text\" name=\"grammar-answer"+num_story+""+number+"\"/><br />\n"
+				+"<label>A wrong answer : </label><input type=\"text\" name=\"grammar-answer"+num_story+""+number+"\"/><br />\n"
+				+"<label>A wrong answer : </label><input type=\"text\" name=\"grammar-answer"+num_story+""+number+"\"/><br />\n"
+				+"<label>A wrong answer : </label><input type=\"text\" name=\"grammar-answer"+num_story+""+number+"\"/><br />\n"
 				+"</div>\n";
 
 			$("#story"+num_story).find(".grammar-questions").append(newQuest);

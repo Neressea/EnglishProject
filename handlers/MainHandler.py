@@ -17,6 +17,16 @@ from handlers.User import User
 template_dir = os.path.join(os.path.dirname(__file__), '../templates')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), autoescape=True)
 
+def filter_shuffle(seq):
+    try:
+        result = list(seq)
+        random.shuffle(result)
+        return result
+    except:
+        return seq
+
+jinja_env.filters['shuffle'] = filter_shuffle
+
 class Handler(webapp2.RequestHandler):
     def write(self, *a, **kw):
     	self.response.write(*a, **kw)

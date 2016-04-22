@@ -69,7 +69,7 @@
 
 							<label for="grammar-answer{{i}}{{j}}">Your answer: </label>
 
-							{% for ans in answers %}
+							{% for ans in answers|shuffle %}
 								<input type="radio" name="grammar-answer{{i}}{{j}}" value="{{ans}}">{{ans}}</input>
 							{% endfor %}
 						</div>
