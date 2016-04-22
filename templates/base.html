@@ -2,26 +2,31 @@
 <html>
 <head>
 	<title>{{namepage}}</title>
-	<link rel="stylesheet" type="text/css" href="main.css" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="stylesheets/bootstrap/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="stylesheets/main.css" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
 <body>
 
-<div id="main">
+<div class="text-center" class="pagination-centered" id="main">
 	{% if user %}
-		<nav>
-			<li><a href="/" id="main_link">{{sitename}}</a></li>
-			<li>Welcome home, {{user.username}}!</li>
+		<ul class="nav nav-pills">
+			<li class="active"><a href="/" id="main_link">{{sitename}}</a></li>
+			<li class="divider"></li>
 			<li><a href="/newlesson"> Post a new lesson !</a></li>
 			<li><a href="/training">Training</a></li>
 			<li><a href="/account">My Account</a></li>
+			<li class="divider"></li>
 			<li><a href="/logout">Logout</a></li>
-		</nav>
+		</ul>
+		<br>
 
 	{% else %}
-		<nav>
+		<ul class="nav nav-pills">
 			<li><a href="/" id="main_link">{{sitename}}</a></li>
-		</nav>
+		</ul>
 	{% endif %}
 
 	{% block content %}

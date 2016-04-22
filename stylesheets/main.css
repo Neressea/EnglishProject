@@ -1,3 +1,19 @@
+.bg-1 {
+    background-color: #1abc9c; /* Green */
+    color: #ffffff;
+}
+.bg-2 {
+    background-color: #474e5d; /* Dark Blue */
+    color: #ffffff;
+}
+.bg-3 {
+    background-color: #fff22f; /* yellow */
+    color: #5555
+}
+.container-fluid {
+    padding-top: 0 px;
+    padding-bottom: 20px;
+}
 h2, h3{
 	display: inline-block;
 }
@@ -5,14 +21,14 @@ h1{
 	text-align: center;
 }
 #main_link{
-	color: #21A462;
+	color: #111111;
 }
 .link_article{
 	color:#8ABE9A;
 }
 a{
 	text-decoration: none;
-	color:#00CC00;
+	color:#ffffff;
 }
 a:hover{
 	text-decoration: underline;
@@ -22,7 +38,7 @@ a:hover{
 }
 
 #main{
-	width: 50%;
+	width: 60%;
 	margin: 0 auto;
 	padding: 10px;
 }
@@ -33,7 +49,7 @@ a:hover{
 }
 
 .error{
-	color: red;
+	color: #ff0000;
 }
 
 .post{
@@ -56,4 +72,7 @@ a:hover{
 	display: block;
 	position: absolute;
 	margin: 0px;
+}
+body{
+	background-color: #d3d3d3
 }
