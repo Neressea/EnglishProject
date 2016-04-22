@@ -49,4 +49,17 @@ class Handler(webapp2.RequestHandler):
 		if user:
 			kw["user"] = user
 
+		active = ['', '', '', '', '']
+
+		if template == "create_lesson.html":
+			active[1] = 'active'
+		elif template == "account.html":
+			active[3] = 'active'
+		elif template == "lesson.html":
+			active[2] = 'active'
+		else:	
+			active[0] = 'active'
+
+		kw['active'] = active
+
 		self.write(self.render_str(template, **kw))

@@ -9,6 +9,7 @@ import re
 import sys
 import webapp2
 import jinja2
+import random
 
 from handlers.Helpers import *
 from handlers.User import User
@@ -78,7 +79,9 @@ class TrainingHandler(Handler):
 				i = i + 1
 
 		if lesson is None:
-			lesson = db.GqlQuery("SELECT * FROM Lesson ").fetch(100)[0]
+			lessons = db.GqlQuery("SELECT * FROM Lesson ").fetch(100)
+			rng = random.randint(0, len(lessons)-1)
+			lesson = lessons[rng]
 			training = "FAIL"
 
 		#On récupère toutes les histoires liées à la leçon
