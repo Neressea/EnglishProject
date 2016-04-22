@@ -78,10 +78,10 @@ class TrainingHandler(Handler):
 					lesson = lessons[i]
 				i = i + 1
 
-		if lesson is None:
+		while lesson is None:
 			lessons = db.GqlQuery("SELECT * FROM Lesson ").fetch(100)
 			rng = random.randint(0, len(lessons)-1)
-			lesson = lessons[rng]
+			lesson = lessons[rng] if lessons[rng].key().id() not in user.lessons_done else None
 			training = "FAIL"
 
 		#On récupère toutes les histoires liées à la leçon
