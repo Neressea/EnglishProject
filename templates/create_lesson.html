@@ -3,30 +3,27 @@
 {% block content %}
 
 	{% if auth %}
+
 		<form method="post" action="/newlesson">
-			
-			<label for="title">Title of the lesson</label>
-			<input type="text" name="title" value="{{title}}"/>
-			
-			
-			<label for="difficulty">Difficulty</label>
-			<select name="difficulty">
-				<option selected="selected" value="Easy">Easy</option>
-				<option value="Medium">Medium</option>
-				<option value="Hard">Hard</option>
-			</select>
-			
+			<fieldset class="form-group centerize"> 
+				<label for="title">Title</label>
+				<input class="form-control" type="text" name="title" value="{{title}}" placeholder="Title of your Lesson"/>			
+				<label for="difficulty">Difficulty</label>
+				<select class="form-control smallform" name="difficulty">
+					<option selected="selected" value="Easy">Easy</option>
+					<option value="Medium">Medium</option>
+					<option value="Hard">Hard</option>
+				</select>
+			</fieldset>
 
 			<div class="stories">
-				
-
 			</div>
-
+			<br>
 			<a href="javascript:lastStory()" onclick="addAStory()">Add another story to the lesson</a>
-
+			<br>
 			<div class="error">{{error}}</div>
-
-			<input type="submit" value="Send"/>
+			<br>
+			<button type="submit" class="btn btn-success"> Submit </button>
 		</form>
 	{% else %}
 		<p class="error">Vous n'êtes pas authentifié !</p>
@@ -42,33 +39,40 @@
 		function addAStory(){
 			var number = $(".story").length + 1;
 
-			var newStory = "<div class=\"story\" id=\"story"+number+"\">\n"
+			var newStory = "<div class=\"story bg-1\" id=\"story"+number+"\">\n"
 					+"<h2>Story "+number+"</h2>\n"
-					+"<label for=\"title_story"+number+"\">Title of the story</label>\n"
-					+"<input type=\"text\" name=\"title_story"+number+"\" id=\"title_story"+number+"\"/>"
-					+"<label for=\"type_of_story"+number+"\">Type of story :</label>"
-					+"<select name=\"type_of_story"+number+"\" id=\"type_of_story"+number+"\" class=\"type_of_story\">"
-					+"<option value=\"text\" selected=\"selected\">Text</option>"
-					+"<option value=\"video\">Video youtube</option>"
-					+"</select>"
-					+"<label for=\"story_text\">Text of the story</label>\n"
-					+"<textarea name=\"story_text\"></textarea>\n"
-					+"<div class=\"questions\">\n"
+					+"<fieldset class=\"form-group centerize\">"
+						+"<label for=\"title_story"+number+"\"> Title </label>\n"
+						+"<input class=\"form-control\" type=\"text\" name=\"title_story"+number+"\" id=\"title_story"+number+"\" placeholder=\"Title of the story\"/>"
+						+"<label for=\"type_of_story"+number+"\">Type of story :</label>"
+						+"<select class=\"form-control smallform\" name=\"type_of_story"+number+"\" id=\"type_of_story"+number+"\" class=\"type_of_story\">"
+						+"<option value=\"text\" selected=\"selected\">Text</option>"
+						+"<option value=\"video\">Video</option>"
+						+"</select>"
+						+"<label for=\"story_text\">Text of the story</label>\n"
+						+"<textarea class=\"form-control\" name=\"story_text\" placeholder=\" Write or copy/paste a story, or the URL of the video\"></textarea>\n"
+					+"</fieldset>"
+					+"<div class=\"questions bg-2\">\n"
 						+"<h3>Questions</h3>\n"
 						+"<div class=\"vocabulary-questions\">\n"
+						+"<hr/>"
 						+	"<h4>Vocabulary questions</h4>\n"
-						+	"<p>Write your text, and surround the word you want to make holes with \"[hole][/hole]\"</p>\n"
 						+"</div>\n"
+						+"<hr width=\"30%\"/>"
 						+"<a href=\"#\" class=\"newVocabulary\" onclick=\"return false;\">Add a new vocabulary question</a>\n"
 						+"<div class=\"grammar-questions\">\n"
+						+"<hr/>"
 						+	"<h4>Grammar questions</h4>\n"
 						+	"<p>Write your question, write the correct answer and then wrong answers!</p>\n"
 						+"</div>"
+						+"<hr width=\"30%\"/>"
 						+"<a href=\"#\" class=\"newGrammar\" onclick=\"return false;\">Add a new grammar question</a>\n"
 						+"<div class=\"comprehension-questions\" onclick=\"return false;\">\n"
+						+"<hr/>"
 						+	"<h4>Comprehension questions</h4>\n"
 						+	"<p>Write your question and the answer you want. Think that the student has to find it exactly, so don't make it too tricky !</p>\n"
 						+"</div>\n"
+						+"<hr width=\"30%\"/>"
 						+"<a href=\"#\" class=\"newComprehension\" onclick=\"return false;\">Add a new comprehension question</a>\n"
 					+"</div>\n"
 				+"</div>\n";
@@ -117,9 +121,11 @@
 			var id = "vocabulary-question"+num_story+""+number;
 
 			var newQuest = "<div class=\"vocabulary-question\" id=\""+id+"\">\n"
-				+ "<h5>Question "+number+"</h5>\n"
-				+ "<label for=\"vocabulary-question"+num_story+"\">The question :</label>\n"
-				+ "<textarea class=\"vocabulary-text\" name=\"vocabulary-question"+num_story+"\"></textarea>\n"
+				+"<hr width=\"10%\"/>"
+				+"<fieldset class=\"form-group centerize\">"
+				+ "<label for=\"vocabulary-question"+num_story+"\"> Question "+number+" :</label>\n"
+				+ "<textarea class=\"vocabulary-text form-control\" name=\"vocabulary-question"+num_story+"\" placeholder=\"Write your text, and surround the word you want to make holes with [hole][/hole]\"></textarea>\n"
+				+"</fieldset>"
 				+ "</div>\n";
 
 			$("#story"+num_story).find(".vocabulary-questions").append(newQuest);
@@ -134,12 +140,19 @@
 			var id = "grammar-question"+num_story+""+number;
 
 			var newQuest = "<div class=\"grammar-question\" id=\""+id+"\">\n"
-				+"<h5>Question "+number+"</h5>\n"
-				+"<label for=\"\">The question : </label><input type=\"text\" name=\"grammar-question"+num_story+"\"/><br />"
-				+"<label>The correct answer : </label><input type=\"text\" name=\"grammar-answer"+num_story+""+number+"\"/><br />\n"
-				+"<label>A wrong answer : </label><input type=\"text\" name=\"grammar-answer"+num_story+""+number+"\"/><br />\n"
-				+"<label>A wrong answer : </label><input type=\"text\" name=\"grammar-answer"+num_story+""+number+"\"/><br />\n"
-				+"<label>A wrong answer : </label><input type=\"text\" name=\"grammar-answer"+num_story+""+number+"\"/><br />\n"
+				+"<hr width=\"10%\"/>"
+				+"<fieldset class=\"form-group centerize\">"
+				+"<label for=\"\">The question : </label>"
+				+"<input class=\"form-control\" type=\"text\" name=\"grammar-question"+num_story+"\" placeholder=\"ex: This year, I have ___ responsibilities\"/><br />"
+				+"<label>The correct answer : </label>"
+				+"<input class=\"form-control\" type=\"text\" name=\"grammar-answer"+num_story+""+number+"\" placeholder=\"ex: taken\"/><br />\n"
+				+"<label>A wrong answer : </label>"
+				+"<input class=\"form-control\" type=\"text\" name=\"grammar-answer"+num_story+""+number+"\" placeholder=\"ex: took\"/><br />\n"
+				+"<label>A wrong answer : </label>"
+				+"<input class=\"form-control\" type=\"text\" name=\"grammar-answer"+num_story+""+number+"\" placeholder=\"ex: taked\"/><br />\n"
+				+"<label>A wrong answer : </label>"
+				+"<input class=\"form-control\" type=\"text\" name=\"grammar-answer"+num_story+""+number+"\" placeholder=\"ex: take\"/><br />\n"
+				+"</fieldset>"
 				+"</div>\n";
 
 			$("#story"+num_story).find(".grammar-questions").append(newQuest);
@@ -154,10 +167,13 @@
 			var id = "comprehension-question"+num_story+""+number;
 
 			var newQuest = "<div class=\"comprehension-question\" id=\""+id+"\">\n"
-				+"<h5>Question "+number+"</h5>\n"
-				+"<label for=\"comprehension-question"+num_story+"\">Your question :</label>\n"
-				+"<input type=\"text\" name=\"comprehension-question"+num_story+"\"/>\n"
-				+"<label for=\"comprehension-answer"+num_story+"\">The answer</label><input type=\"text\" name=\"comprehension-answer"+num_story+"\"/>\n"
+				+"<hr width=\"10%\"/>"
+				+"<fieldset class=\"form-group centerize\">"
+				+"<label for=\"comprehension-question"+num_story+"\"> Question "+number+"</label>\n"
+				+"<input class=\"form-control\" type=\"text\" name=\"comprehension-question"+num_story+"\" placeholder=\"ex: Who invented the zipper ? \" />\n"
+				+"<label for=\"comprehension-answer"+num_story+"\">The answer</label>"
+				+"<input class=\"form-control\" type=\"text\" name=\"comprehension-answer"+num_story+"\" placeholder=\"ex: Gideon Sundback\" />\n"
+				+"</fieldset>"
 				+"</div>\n";
 
 			$("#story"+num_story).find(".comprehension-questions").append(newQuest);

@@ -18,10 +18,15 @@
 }
 
 h2, h3{
-	display: inline-block;
+	/* display: inline-block; */
+	color: #7d9cb4;
 }
 h1{
 	text-align: center;
+	color: #7d9cb4;
+}
+p {
+	color:#88a7c0;
 }
 #main_link{
 	color: #111111;
@@ -85,4 +90,9 @@ body{
 
 .btn-success > a {
 	color: #fff;
+}
+
+.smallform {
+	width:15%;
+	margin:auto;
 }
