@@ -1,19 +1,22 @@
+/* COLORS : 
+ 	#ffffff 	(255,255,255)	white
+	#c8c8c8 	(200,200,200)	light gray
+	#f1eeca 	(241,238,202)	beige
+	#88a7c0 	(136,167,192)	light blue gray
+	#7d9cb4 	(125,156,180)	medium blue gray
+	#61a5cc light blue
+*/
+
+
 .bg-1 {
-    background-color: #1abc9c; /* Green */
-    color: #ffffff;
+    background-color: #c8c8c8; 
+    color: #7d9cb4;
 }
 .bg-2 {
-    background-color: #474e5d; /* Dark Blue */
-    color: #ffffff;
+    background-color: #d2d2d2;
+    color: #7d9cb4;
 }
-.bg-3 {
-    background-color: #fff22f; /* yellow */
-    color: #5555
-}
-.container-fluid {
-    padding-top: 0 px;
-    padding-bottom: 20px;
-}
+
 h2, h3{
 	display: inline-block;
 }
@@ -28,7 +31,7 @@ h1{
 }
 a{
 	text-decoration: none;
-	color:#ffffff;
+	color:#88a7c0;
 }
 a:hover{
 	text-decoration: underline;
@@ -38,16 +41,16 @@ a:hover{
 }
 
 #main{
-	width: 60%;
-	margin: 0 auto;
-	padding: 10px;
+	width: 100%;
+	margin: 20 auto;
+	padding: 0px;
 }
-
-.article-title{
-	padding:0px;
-	margin:0px;
+.centerize{
+	margin-left: auto;
+    margin-right: auto;
+    width:50%;
+    margin-bottom:20px;
 }
-
 .error{
 	color: #ff0000;
 }
@@ -55,15 +58,6 @@ a:hover{
 .post{
 	color: #D02090;
 }
-
-.created{
-	font-size: 0.8em;
-}
-
-.article-art{
-	font-size: 1.2em;
-}
-
 .tojson{
 	color: #00B8FF;
 }
@@ -74,5 +68,21 @@ a:hover{
 	margin: 0px;
 }
 body{
-	background-color: #d3d3d3
+	background-color: #f1eeca
+}
+
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus{
+	background-color: #61a5cc;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #61a5cc;
+  border-color: #2e6da4;
+}
+
+.btn-success > a {
+	color: #fff;
 }
