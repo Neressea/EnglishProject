@@ -2,11 +2,31 @@
 {% block content %}
 
 	{% if user %}
+		<form class="menu" action="javascript:void(0);">
+			<label for="name-input">Name of the lesson : </label><input type="text" name="name-input" id="name-input"/><br/>
+			<label for="diff-input">Difficulty of the lesson : </label>
+			<select name="diff-input" id="diff-input">
+				<option label=" "></option>
+				<option value="Easy">Easy</option>
+				<option value="Medium">Medium</option>
+				<option value="Hard">Hard</option>
+			</select>
+			<br/>
+			<label for="theme-input">Theme of the lesson : </label>
+			<select name="theme-input" id="theme-input">
+				<option label=" "></option>
+				<option value="Vocabulary">Vocabulary</option>
+				<option value="Grammar">Grammar</option>
+				<option value="Comprehension">Comprehension</option>
+			</select>
+			<br/>
+			<input type="submit" value="Search" onclick="filterPage(); return false;"/>
+		</form>
 		{% for lesson in lessons %}
 			{% if lesson.key().id() not in user.lessons_done %}
-				<div class="lesson">
+				<div class="lesson" less-name="{{lesson.title}}" diff="{{lesson.difficulty}}" theme="{{lesson.dominant}}">
 					<h2><a href="/{{lesson.key().id()}}">{{lesson.title}}</a></h2>
-					<p>{{lesson.difficulty}}</p>
+					<p><span>{{lesson.difficulty}}</span> / <span>{{lesson.dominant}}</span></p>
 					<p class="created">Posted the {{lesson.created.strftime('%A %d %B %Y')}} at {{lesson.created.strftime('%H:%M:%S')}}</p>
 				</div>
 			{% endif %}
@@ -30,5 +50,34 @@
 		<br>
 		<button class="btn btn-success"> <a href="/signup">Create an account</a> </button>
 	{% endif %}
+
+	<script type="text/javascript">
+		function filterPage(){
+			//We get the fields
+			field_name = $("#name-input").val();
+			field_diff = $("#diff-input").val();
+			field_theme = $("#theme-input").val();
+
+			slct = "div[class=\"lesson\"]";
+
+			if(field_name != ''){
+				slct+="[less-name="+field_name+"]";
+			}
+
+			if(field_diff != ''){
+				slct+="[diff="+field_diff+"]";
+			}
+
+			if(field_theme != ''){
+				slct+="[theme="+field_theme+"]";
+			}
+
+			//We hide everything
+			$(".lesson").hide('fast');
+
+			//We show what we want
+			$(slct).show("slow")
+		}
+	</script>
 
 {% endblock %}
