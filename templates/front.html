@@ -20,7 +20,6 @@
 				<option value="Comprehension">Comprehension</option>
 			</select>
 			<br/>
-			<input type="submit" value="Search" onclick="filterPage(); return false;"/>
 		</form>
 		{% for lesson in lessons %}
 			{% if lesson.key().id() not in user.lessons_done %}
@@ -61,15 +60,15 @@
 			slct = "div[class=\"lesson\"]";
 
 			if(field_name != ''){
-				slct+="[less-name="+field_name+"]";
+				slct+="[less-name=\""+field_name+"\"]";
 			}
 
 			if(field_diff != ''){
-				slct+="[diff="+field_diff+"]";
+				slct+="[diff=\""+field_diff+"\"]";
 			}
 
 			if(field_theme != ''){
-				slct+="[theme="+field_theme+"]";
+				slct+="[theme=\""+field_theme+"\"]";
 			}
 
 			//We hide everything
@@ -78,6 +77,20 @@
 			//We show what we want
 			$(slct).show("slow")
 		}
+
+		// We add listeners to all fiel of the form
+		$( "#name-input" ).change(function() {
+		  filterPage();
+		});
+
+		$( "#diff-input" ).change(function() {
+		  filterPage();
+		});
+
+		$( "#theme-input" ).change(function() {
+		  filterPage();
+		});
+
 	</script>
 
 {% endblock %}
