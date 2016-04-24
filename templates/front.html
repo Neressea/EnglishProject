@@ -3,6 +3,7 @@
 
 	{% if user %}
 		<form class="menu" action="javascript:void(0);">
+			<h2>Search filters</h2> <br />
 			<label for="name-input">Name of the lesson : </label><input type="text" name="name-input" id="name-input"/><br/>
 			<label for="diff-input">Difficulty of the lesson : </label>
 			<select name="diff-input" id="diff-input">
@@ -23,13 +24,16 @@
 		</form>
 		{% for lesson in lessons %}
 			{% if lesson.key().id() not in user.lessons_done %}
-				<div class="lesson" less-name="{{lesson.title}}" diff="{{lesson.difficulty}}" theme="{{lesson.dominant}}">
+				<div class="lesson" less-name="{{lesson.title.lower()}}" diff="{{lesson.difficulty}}" theme="{{lesson.dominant}}">
 					<h2><a href="/{{lesson.key().id()}}">{{lesson.title}}</a></h2>
 					<p><span>{{lesson.difficulty}}</span> / <span>{{lesson.dominant}}</span></p>
 					<p class="created">Posted the {{lesson.created.strftime('%A %d %B %Y')}} at {{lesson.created.strftime('%H:%M:%S')}}</p>
 				</div>
 			{% endif %}
 		{% endfor %}
+
+		
+
 	{% else %}
 		<form method="post" action="/login">
 				<div class="form-group">
@@ -47,50 +51,51 @@
 			<button type="submit" class="btn btn-primary"> Connect </button>
 		</form>
 		<br>
-		<button class="btn btn-success"> <a href="/signup">Create an account</a> </button>
+		<button class="btn btn-success" onclick="document.location.href='/signup';">Create an account</button>
 	{% endif %}
 
 	<script type="text/javascript">
-		function filterPage(){
-			//We get the fields
-			field_name = $("#name-input").val();
-			field_diff = $("#diff-input").val();
-			field_theme = $("#theme-input").val();
+			function filterPage(){
+				//We get the fields
+				field_name = $("#name-input").val();
+				field_diff = $("#diff-input").val();
+				field_theme = $("#theme-input").val();
 
-			slct = "div[class=\"lesson\"]";
+				slct = "div[class=\"lesson\"]";
 
-			if(field_name != ''){
-				slct+="[less-name=\""+field_name+"\"]";
+				if(field_name != ''){
+					slct+="[less-name=\""+field_name.toLowerCase()+"\"]";
+				}
+
+				if(field_diff != ''){
+					slct+="[diff=\""+field_diff+"\"]";
+				}
+
+				if(field_theme != ''){
+					slct+="[theme=\""+field_theme+"\"]";
+				}
+
+				//We hide everything
+				$(".lesson").hide('fast');
+
+				//We show what we want
+				$(slct).show("slow")
 			}
 
-			if(field_diff != ''){
-				slct+="[diff=\""+field_diff+"\"]";
-			}
+			// We add listeners to all fiel of the form
+			$( "#name-input" ).change(function() {
+			  filterPage();
+			});
 
-			if(field_theme != ''){
-				slct+="[theme=\""+field_theme+"\"]";
-			}
+			$( "#diff-input" ).change(function() {
+			  filterPage();
+			});
 
-			//We hide everything
-			$(".lesson").hide('fast');
-
-			//We show what we want
-			$(slct).show("slow")
-		}
-
-		// We add listeners to all fiel of the form
-		$( "#name-input" ).change(function() {
-		  filterPage();
-		});
-
-		$( "#diff-input" ).change(function() {
-		  filterPage();
-		});
-
-		$( "#theme-input" ).change(function() {
-		  filterPage();
-		});
+			$( "#theme-input" ).change(function() {
+			  filterPage();
+			});
 
 	</script>
 
 {% endblock %}
+
