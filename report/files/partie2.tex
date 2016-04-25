@@ -1,32 +1,21 @@
-\section{La phase de développement}
+\section{La mise en œuvre technique du projet}
+
+\subsection{L'organisation du projet}
+
+Afin de travailler dans les meilleures conditions possibles, nous avons utilisé le gestionnaire de version \textbf{git} qui permet de gérer de manière approfondie le versionnage du projet et de travailler simultanément plus facilement. le projet se trouve sur le dépôt public \url{https://github.com/Neressea/EnglishProject}
 
 \subsection{Les attentes atteintes}
 
-L'ensemble du cahier des charges minimal a été implémenté. De plus, la difficulté est proportionnelle au niveau du joueur. En effet, le nombre d'ennemis dépend du niveau du joueur, et donc des dégâts qu'il a infligés. Nous avons aussi ajouté une attaque à usage limitée. Des items sont laissés par les ennemis vaincus pour régénérer les points de vie du héros ou son sort limité. Des musiques et sons sont joués dans l'écran de sélection, durant la partie, et lorsque le joueur perd. Nous avons aussi implémenté la possibilité de changer les touches de contrôle. Cependant, les touches actuellement sélectionnées ne sont pas affichées et une touche déjà affectée doit être désaffectée avant d'être de nouveau assignée à une autre commande. Enfin, la vue a été adaptée pour que la carte soit redimensionnable en cours de partie. 
 
-\subsection{Ce qui reste inachevé}
+\subsection{Les problèmes rencontrés et les solutions appliquées}
 
-Malheureusement, nous n'avons pas réussi à mettre en pratique nos autres idées. Nous avons tout de même préparé l'implémentation de certaines fonctionnalités. Ainsi, même si l'éditeur de cartes n'a pas été réalisé, le code a été adapté afin de pouvoir charger des fichiers textes formatés, ce qui facilite son ajout ultérieur. \\
-Pour l'intelligence artificielle des ennemis, nous avions prévu d'utiliser l'algorithme de Dijkstra afin de créer des ennemis intelligents capables d'éviter les obstacles. Cependant nous n'en avons pas eu le temps ; nous avons donc décidé de pimenter le jeu avec le nombre d'ennemis. \\
-Les tourelles que l'on pose quant à elles sont bien destructibles par les ennemis et les attaquent, mais leurs tirs sont aléatoires.
-
-\subsection{Les problèmes rencontrés}
-
-	\subsubsection{Quelques problèmes de communication}
- 
-En nous confrontant pour la première fois à un travail de groupe de cette ampleur, nous avons rencontré quelques difficultés, dont certaines communicationnelles. En effet, lors de la recherche de sprites, nous avons commencé par les boules de feu ; puis nous nous sommes concertés pour la recherche des boules de glace. Cependant à cause d'un quiproquo, nous avons eu temporairement des sprites de cornets de glace.
-
-	\subsubsection{Git et les machines virtuelles}
-	L'un des membres utilisant une machine virtuelle, nous avons passé un certain temps à essayer de configurer la VM pour pouvoir pusher les fichiers sur github, en vain. Nous avons donc été contraint de transférer des fichiers sur un autre ordinateur et d'utiliser un autre compte github, ce qui explique les commits de seulement deux des trois membres.
-
-	\subsubsection{De la mémoire et des fuites}
-
-Après plusieurs longues séances de codage consécutives, nous nous sommes rendus compte que le programme provoquait un ralentissement général, voire l'instabilité du système d'exploitation. Nous avons rapidement repéré l'origine du problème. En effet, la mémoire vive consommée augmentait à chaque tour de boucle jusqu'à être saturée. En utilisant valgrind, nous avons pu mettre en évidence des textures chargées qui n'étaient pas détruites au sein de fonctions appelées dans la boucle principale.
-
-	\subsubsection{Gestion événementielle}
 	
-	Nous n'arrivions pas dans un premier temps à gérer l'appui de plusieurs touches en même temps. Nous avons alors changé notre Wait Event par un Poll Event. Ce dernier a comme avantage de garder en mémoire plusieurs événements, contrairement à Wait Event qui les gère un par un. Les événements étant stockés dès le premier appel de la fonction Poll Event, un switch(Poll Event) n'est pas nécessaire. Nous avons ensuite décidé de créer un tableau de booléens contenant les états de chaque touche nécessaire au jeu. Il a donc fallu contrôler à la fois les pressions exercées sur les touches et leurs relâchements. Ce tableau nous a permis de gérer les événements de manière plus lisible, mais aussi de gérer grâce à une condition l'état de plusieurs touches à la fois. 
+\subsection{Ce qui aurait pu être fait}
+\paragraph{Les comptes administrateurs}
+Bien que déjà implémenté dans la base de données, nous n'avons pas eu le temps de mettre en place les privilèges accordés aux administrateurs (édition et suppression de leçons, suppression de comptes utilisateurs).
 
-	\subsubsection{La vue et le modèle}
+\paragraph{Le choix du type de question}
+Nous aurions pu proposer à l'utilisateur de choisir le type de question (texte à trous, QCM, question directe) désirée au lieu de décider ce type en fonction du thème de la question (vocabulaire, grammaire, compréhension).
 
-Nous avons essayé de respecter au mieux possible un pattern vue-modèle, en les dissociant au maximum. Ceci a entraîné de nombreuses phases de calcul pour l'affichage, étant donné que le modèle est un quadrillage alors que la vue peut "glisser" sur la carte pixel par pixel. De la même manière, un calcul a été nécessaire dans la gestion des collisions pour corriger cette différence bornée par la taille des cases (dans notre cas 100px). De plus, à cause des collisions avec les murs nous avons dû redécouper les sprites des monstres et des héros afin de les rendre plus réalistes. En ce qui concerne la collision entre les personnages, nous l'avions implémentée à l'origine, mais vu le nombre d'ennemis, le héros finissait rapidement bloqué par une horde de monstres, ce qui sapait l'intérêt des parties. Nous l'avons donc retirée, en privilégiant le gameplay au réalisme.
+\paragraph{Droits utilisateurs}
+En l'état, un utilisateur ayant posté une leçon ne peut pas l'éditer ultérieurement. Nous aurions pu offrir cette possibilité.

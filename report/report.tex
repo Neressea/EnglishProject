@@ -3,7 +3,7 @@
 %\documentclass[a4paper,11pt,twoside,final]{article}
 
 \usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
-\usepackage[english,francais]{babel}
+\usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[pdftex]{graphicx}
@@ -15,9 +15,9 @@
 \addtocontents{toc}{\cftpagenumbersoff{section}}
 \addtocontents{toc}{\cftpagenumbersoff{subsubsection}}
 
-\newcommand{\reporttitle}{Topo Head}     % Titre
-\newcommand{\reportauthor}{Nicolas \textsc{BÉDRINE}} % Auteur
-\newcommand{\reportsubject}{Rapport de projet C} % Sujet
+\newcommand{\reporttitle}{Anglofun}     % Titre
+\newcommand{\reportauthor}{} % Auteur
+\newcommand{\reportsubject}{English project} % Sujet
 \newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
 \setlength{\parskip}{1ex} % Espace entre les paragraphes
 
@@ -43,6 +43,8 @@
   \cleardoublepage
   \include{files/partie2}
   \cleardoublepage
+  \include{files/conclusion}
+  \cleardoublepage  
   
   \thispagestyle{empty}
   \include{files/references}
