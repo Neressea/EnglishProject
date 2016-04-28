@@ -7,6 +7,20 @@
 	#61a5cc light blue
 */
 
+#check-button{
+	margin: 10px;
+	width: 30%;
+}
+
+.answer_false{
+	color: red;
+	font-weight: bold;
+}
+
+.answer_true{
+	color: green;
+	font-weight: bold;
+}
 
 .bg-1 {
     background-color: #c8c8c8; 

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-	<form class="lesson" method="post" action="/check">
+	<form class="lesson" method="post" action="/check" id="lesson_form">
 		<input type="hidden" name="id-lesson" value="{{lesson.key().id()}}" />
 
 		{% if training %}
@@ -95,7 +95,9 @@
 
 		{% endfor %}
 
-		<input type="submit" value="Check !"/>
+		<div class="text-center"> 
+			<input type="submit" value="Check !" class="btn btn-success" id="check-button"/>
+		</div>
 
 		<p class="created">Posted the {{lesson.created.strftime('%A %d %B %Y')}} at {{lesson.created.strftime('%H:%M:%S')}}</p>
 	</form>

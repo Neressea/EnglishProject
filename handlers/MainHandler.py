@@ -57,6 +57,8 @@ class Handler(webapp2.RequestHandler):
 			active[3] = 'active'
 		elif template == "lesson.html":
 			active[2] = 'active'
+		elif template == 'results.html':
+			active[2] = 'active'
 		else:	
 			active[0] = 'active'
 
