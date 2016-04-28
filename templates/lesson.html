@@ -18,15 +18,15 @@
 		{% set i = 0 %}
 		{% for story in stories %}
 			{% set i = i + 1 %}
-			<div class="container-fluid bg-1 story" id="story{{i}} text-center">
-				<h2>Story {{i}} : {{story.title}}</h2>
+			<div class="container-fluid bg-1 story text-center" id="story{{i}}">
+				<h2>{{story.title}}</h2>
 				<div class="centerize">
 				{% if story.type_of_story == "video" %}
 					<div class="embed-responsive embed-responsive-16by9">
 						<iframe class="embed-responsive-item" src="{{story.text}}" frameborder="0" allowfullscreen></iframe>
 					</div>
 				{% else %}
-					<p class=text-justify>{{story.text}}</p>
+					<pre class=text-justify>{{story.text}}</pre>
 				{% endif %}
 				</div>
 			</div>

@@ -34,6 +34,7 @@ class Lesson(db.Model):
 
 class Story(db.Model):
 	id_lesson = db.IntegerProperty(required = True)
+	num_story = db.IntegerProperty(required = True)
 	title = db.StringProperty(required = True)
 	type_of_story = db.StringProperty(required = True)
 	text = db.TextProperty(required = True)
@@ -108,7 +109,7 @@ class CreateLesson(Handler):
 				directs[j] = db.Text(directs[j] + "|" + directs_responses[j])
 
 			#On crée l'objet Story courant
-			stry = Story(type_of_story = type_of_story, title=title_story, id_lesson = id_lesson, text=stories[i], questions_vocabulary = holes, questions_grammar = QCMs, questions_comprehension = directs)
+			stry = Story(type_of_story = type_of_story, title=title_story, id_lesson = id_lesson, text=stories[i], questions_vocabulary = holes, questions_grammar = QCMs, questions_comprehension = directs, num_story = i)
 			stry.put()
 
 		#On MàJ la dominante de la leçon
@@ -239,10 +240,10 @@ class LessonPage(Handler):
 		lesson = db.get(key)
 
 		if not lesson:
-			self.error(404)
+			self.redirect('/')
 			return
 
-		stories = db.GqlQuery("SELECT * FROM Story WHERE id_lesson = :1", int(id)).fetch(100)
+		stories = db.GqlQuery("SELECT * FROM Story WHERE id_lesson = :1 ORDER BY num_story", int(id)).fetch(100)
 
 		begin = re.escape("[hole]")
 		end = re.escape("[/hole]")

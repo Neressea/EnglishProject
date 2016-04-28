@@ -40,6 +40,7 @@
 			var number = $(".story").length + 1;
 
 			var newStory = "<div class=\"story bg-1\" id=\"story"+number+"\">\n"
+					+ "<input type=\"hidden\" name=\"num-story"+number+"\" value=\""+number+"\" />"
 					+"<h2>Story "+number+"</h2>\n"
 					+"<fieldset class=\"form-group centerize\">"
 						+"<label for=\"title_story"+number+"\"> Title </label>\n"
