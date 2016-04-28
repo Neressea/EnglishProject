@@ -36,6 +36,33 @@
 			$('html,body').animate({scrollTop: $(last).offset().top}, 'slow');
 		}
 
+		function changeTypeStory(number){
+			var type = $("#type_of_story"+number).find(":selected").val();
+			var block = $("#story_text"+number);
+			var content = block.val();
+
+			if(type == "video"){
+				block.replaceWith("<input type=\"text\" class=\"form-control\" name=\"story_text\" placeholder=\" Write or copy/paste the URL of youtube video\" id=\"story_text"+number+"\" value=\""+content+"\">");
+			}else{
+				block.replaceWith("<textarea class=\"form-control\" name=\"story_text\" placeholder=\" Write or copy/paste a story\" id=\"story_text"+number+"\">"+content+"</textarea>");
+			}
+
+			changeContent(number);
+			activateAreas(number);
+		}
+
+		function changeContent(number){
+			var type = $("#type_of_story"+number).find(":selected").val();
+			var prev = $("#preview"+number);
+			var content = $("#story_text"+number).val();
+			if(type == "video"){
+				content = content.replace("watch?v=", "embed/");
+				prev.replaceWith("<iframe class=\"embed-responsive-item\" src=\""+content+"\" frameborder=\"0\" id=\"preview"+number+"\" width=\"480\" height=\"350\" allowfullscreen></iframe>");
+			}else{
+				prev.replaceWith("<pre id=\"preview"+number+"\">"+content+"</pre>");
+			}
+		}
+
 		function addAStory(){
 			var number = $(".story").length + 1;
 
@@ -45,13 +72,15 @@
 					+"<fieldset class=\"form-group centerize\">"
 						+"<label for=\"title_story"+number+"\"> Title </label>\n"
 						+"<input class=\"form-control\" type=\"text\" name=\"title_story"+number+"\" id=\"title_story"+number+"\" placeholder=\"Title of the story\"/>"
-						+"<label for=\"type_of_story"+number+"\">Type of story :</label>"
-						+"<select class=\"form-control smallform\" name=\"type_of_story"+number+"\" id=\"type_of_story"+number+"\" class=\"type_of_story\">"
+						+"<label for=\"type_of_story"+number+"\">Type of story</label>"
+						+"<select class=\"form-control smallform\" name=\"type_of_story"+number+"\" id=\"type_of_story"+number+"\" class=\"type_of_story\" onchange=\"changeTypeStory("+number+");\">"
 						+"<option value=\"text\" selected=\"selected\">Text</option>"
 						+"<option value=\"video\">Video</option>"
 						+"</select>"
 						+"<label for=\"story_text\">Text of the story</label>\n"
-						+"<textarea class=\"form-control\" name=\"story_text\" placeholder=\" Write or copy/paste a story, or the URL of the video\"></textarea>\n"
+						+"<textarea class=\"form-control\" name=\"story_text\" placeholder=\" Write or copy/paste a story\" id=\"story_text"+number+"\"></textarea>\n"
+						+"<label for=\"preview"+number+"\">Preview of the story</label>"
+						+"<div><pre id=\"preview"+number+"\"\"></pre></div>"
 					+"</fieldset>"
 					+"<div class=\"questions bg-2\">\n"
 						+"<h3>Questions</h3>\n"
@@ -114,6 +143,18 @@
 				addVocabularyQuest(number, false);
 				addGrammarQuest(number, false);
 				addComprehensionQuest(number, false);
+
+			    activateAreas(number);
+		}
+
+		function activateAreas(number){
+			$('#story_text' + number).keyup(function(){
+			    changeContent(number);
+		    });
+
+		    $('#story_text' + number).change(function(){
+		        changeContent(number);
+		    });
 		}
 
 		function addVocabularyQuest(num_story, scroll = true){
