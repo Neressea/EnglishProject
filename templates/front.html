@@ -35,23 +35,21 @@
 		
 
 	{% else %}
-		<form method="post" action="/login">
+	<div class="container">
+		<form method="post" action="/login" class="form-signin">
+			<h2 class="form-signin-heading">Please sign in</h2>
 				<div class="form-group">
-					<label> Username : </label>
-					<input type="text" name="username" value="{{username}}"></input>
-				</div>
-
-				<div class="form-group">
-					<label> Password : </label>
-					<input type="password" name="password" value="{{password}}"></input>
+					<input type="text" name="username" value="{{username}}" class="form-control" placeholder="Username" autofocus="" required=""></input>
+					<input type="password" name="password" value="{{password}}" class="form-control" placeholder="Password" required=""></input>
 				</div>
 
 			<div class="error">{{error}}</div>
 
 			<button type="submit" class="btn btn-primary"> Connect </button>
+			<button class="btn btn-success" onclick="document.location.href='/signup';">Create an account</button>
 		</form>
-		<br>
-		<button class="btn btn-success" onclick="document.location.href='/signup';">Create an account</button>
+		
+	</div>
 	{% endif %}
 
 	<script type="text/javascript">

@@ -12,7 +12,7 @@
 
 <div class="text-center" class="pagination-centered" id="main">
 	{% if user %}
-		<ul class="nav nav-pills">
+		<!-- <ul class="nav nav-pills">
 			<li class="{{active[0]}}"><a href="/" id="main_link">{{sitename}}</a></li>
 			<li class="{{active[1]}}"><a href="/newlesson"> Post a new lesson !</a></li>
 			<li class="{{active[2]}}"><a href="/training">Training</a></li>
@@ -20,7 +20,21 @@
 			<li class="divider"></li>
 			<li class="{{active[4]}}"><a href="/logout">Logout</a></li>
 		</ul>
-		<br>
+		<br> -->
+
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+	      
+
+	    <ul class="nav navbar-nav nav-pills" id="main-nav">
+	    	<li class="{{active[0]}}"><a class="navbar-brand {{active[0]}}" href="/" id="main_link">{{sitename}}</a></li>
+	        <li class="{{active[1]}}"><a href="/newlesson"> Post a new lesson !</a></li>
+			<li class="{{active[2]}}"><a href="/training">Training</a></li>
+			<li class="{{active[3]}}"><a href="/account">My Account</a></li>
+			<li class="{{active[4]}}"><a href="/logout">Logout</a></li>
+	    </ul>
+	  </div>
+	</nav>
 
 	{% else %}
 		<ul class="nav nav-pills">

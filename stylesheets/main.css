@@ -7,6 +7,16 @@
 	#61a5cc light blue
 */
 
+.form-signin {
+    margin: 0 auto;
+    max-width: 330px;
+    padding: 15px;
+}
+
+.container{
+	text-align: center;
+}
+
 #check-button{
 	margin: 10px;
 	width: 30%;
@@ -90,9 +100,9 @@ body{
 	background-color: #f1eeca
 }
 
-.nav-pills > li.active > a,
-.nav-pills > li.active > a:hover,
-.nav-pills > li.active > a:focus{
+#main-nav > .active > a,
+#main-nav > .active > a:hover,
+#main-nav > .active > a:focus{
 	background-color: #61a5cc;
 }
 
