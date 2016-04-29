@@ -38,7 +38,7 @@
 									<li class="list-group-item" onclick="document.location = '/{{lesson.key().id()}}'">
 										<h2><a href="/{{lesson.key().id()}}">{{lesson.title}}</a></h2>
 										<p><span class="{{lesson.difficulty}}">{{lesson.difficulty}}</span><span class="{{lesson.dominant}}">{{lesson.dominant}}</span></p>
-										<p class="created">Posted the {{lesson.created.strftime('%A %d %B %Y')}} at {{lesson.created.strftime('%H:%M:%S')}}</p>
+										<p class="created">Posted by {{lesson.created_by}} the {{lesson.created.strftime('%A %d %B %Y')}} at {{lesson.created.strftime('%H:%M:%S')}}</p>
 									</li>
 								</div>
 							{% endif %}
@@ -65,8 +65,8 @@
 
 				<div class="error">{{error}}</div>
 
-				<button type="submit" class="btn btn-primary"> Connect </button>
-				<button class="btn btn-success" onclick="document.location.href='/signup';">Create an account</button>
+				<input type="submit" class="btn btn-primary" value="Connect"></input>
+				<button class="btn btn-success" onclick="document.location.href='/signup';return false;">Create an account</button>
 			</form>
 			
 		</div>

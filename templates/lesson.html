@@ -3,7 +3,7 @@
 
 	<form class="lesson" method="post" action="/check" id="lesson_form" class="">
 		{% if training and training == "NO_ONE" %}
-			<p class="error">We are sorry, but there is no lesson in the database for the moment :/</p>
+			<p class="error">We are sorry, but there is no lesson that you have'nt done in the database for the moment :/</p>
 		{% else %}
 			<input type="hidden" name="id-lesson" value="{{lesson.key().id()}}" />
 			{% if training %}

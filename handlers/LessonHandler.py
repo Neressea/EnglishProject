@@ -201,7 +201,7 @@ class CheckHandler(Handler):
 
 					if to_find[k] == vcbl_ans[len(vcbl_ans)-1]:
 						vocabulary_results.append(1)
-						vocabulary_parts[i+j]+="<input class=\"answer_true\" type=\"text\" name=\"pseudo\" value=\""+vcbl_ans[len(vcbl_ans)-1]+"\" disabled=\"disabled\" />"
+						vocabulary_parts[i+j]+="<input class=\"answer_true voca_hole form-control\" type=\"text\" name=\"pseudo\" value=\""+vcbl_ans[len(vcbl_ans)-1]+"\" disabled=\"disabled\" />"
 					else:
 						vocabulary_results.append(0)
 						vocabulary_parts[i+j]+="<input class=\"answer_false voca_hole form-control\" type=\"text\" name=\"pseudo\" value=\""+vcbl_ans[len(vcbl_ans)-1]+"\" disabled=\"disabled\" />"
