@@ -6,20 +6,33 @@
 
 		<p>Welcome home, {{user.username}}!</p>
 		<p>This is your account. You can see your progression from here. </p>
-		<div>
-			<span>Vocabulary : {{user.grade_vocabulary}}%</span>
-			<span>Grammar : {{user.grade_grammar}}%</span>
-			<span>Comprehension : {{user.grade_comprehension}}%</span>
+		<div id="grades">
+			<div class="grade-group">
+				<span id="voc_grade" class="grade voca">{{user.grade_vocabulary}}%</span>
+				<p>Vocabulary</p>
+			</div>
+			<div class="grade-group">
+				<span id="gramm_grade" class="grade gramm">{{user.grade_grammar}}%</span>
+				<p>Grammar</p>
+			</div>
+			<div class="grade-group">
+				<span id="comp_grade" class="grade comp">{{user.grade_comprehension}}%</span>
+				<p>Comprehension</p>
+			</div>
 		</div>
 
 		<div id="lessons" class="container">
 			<ul class="list-group">
-				<li class="list-group-item" id="lessons-group-title">Lessons you have already done</li>
-			{% for lesson in lessons %}
-				<a href="/{{lesson.key().id()}}">
-					<li class="list-group-item"> {{lesson.title}}</li>
-				</a>
-			{% endfor %}
+				{% if lessons|length > 0 %}
+					<li class="list-group-item" id="lessons-group-title">Lessons you have already done</li>
+					{% for lesson in lessons %}
+						<a href="/{{lesson.key().id()}}">
+							<li class="list-group-item"> {{lesson.title}}</li>
+						</a>
+					{% endfor %}
+				{% else %}
+					<li class="list-group-item" id="lessons-group-title">You haven't done any lesson for the moment!</li>
+				{% endif %}
 			</ul>
 		</div>
 	{% else %}

@@ -3,6 +3,7 @@
 
 	{% if user %}
 		<div class="container">
+			<h2>This is the home page. Here, you can browse lessons posted by all users!</h2>
 			<form action="javascript:void(0);" class="form-signin">
 				<h2 class="form-signin-heading">Search filters</h2>
 				<div class="form-group">
@@ -23,15 +24,29 @@
 					</select>
 				</div>
 			</form>
-			{% for lesson in lessons %}
-				{% if lesson.key().id() not in user.lessons_done %}
-					<div class="lesson" less-name="{{lesson.title.lower()}}" diff="{{lesson.difficulty}}" theme="{{lesson.dominant}}">
-						<h2><a href="/{{lesson.key().id()}}">{{lesson.title}}</a></h2>
-						<p><span>{{lesson.difficulty}}</span> / <span>{{lesson.dominant}}</span></p>
-						<p class="created">Posted the {{lesson.created.strftime('%A %d %B %Y')}} at {{lesson.created.strftime('%H:%M:%S')}}</p>
-					</div>
-				{% endif %}
-			{% endfor %}
+			
+			<div id="lessons" class="container">
+				<ul class="list-group">
+					{% if lessons|length > 0 %}
+						<li class="list-group-item" id="lessons-group-title">Lessons you haven't done for the moment</li>
+						{% for lesson in lessons %}
+							{% if lesson.key().id() not in user.lessons_done %}
+								<a href="/{{lesson.key().id()}}">
+									<li class="list-group-item">
+										<div class="lesson" less-name="{{lesson.title.lower()}}" diff="{{lesson.difficulty}}" theme="{{lesson.dominant}}">
+											<h2><a href="/{{lesson.key().id()}}">{{lesson.title}}</a></h2>
+											<p><span class="{{lesson.difficulty}}">{{lesson.difficulty}}</span><span class="{{lesson.dominant}}">{{lesson.dominant}}</span></p>
+											<p class="created">Posted the {{lesson.created.strftime('%A %d %B %Y')}} at {{lesson.created.strftime('%H:%M:%S')}}</p>
+										</div>
+									</li>
+								</a>							
+							{% endif %}
+						{% endfor %}
+					{% else %}
+						<li class="list-group-item" id="lessons-group-title">We are sorry, but there is no lesson for the moment :(</li>
+					{% endif %}
+				</ul>
+			</div>
 
 		</div>
 

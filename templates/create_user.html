@@ -4,27 +4,20 @@
 {% if user %}
 	<p class="error">You are already authentified!</p>
 {% else %}
+	<div class="container">
+		<h2>Here, you can join us!</h2>
+		<form method="post" class="form-signin">
+				<input type="text" name="username" value="{{username_temp}}" class="form-control" placeholder="Your username"></input>
 
-	<form method="post">
-		<label>
-			<div>Username</div>
-			<input type="text" name="username" value="{{username_temp}}"></input>
-		</label>
+				<input type="password" name="password" value="{{password}}" class="form-control" placeholder="Your password"></input>
 
-		<label>
-			<div>Password</div>
-			<input type="password" name="password" value="{{password}}"></input>
-		</label>
+				<input type="password" name="verify" value="{{verify}}" class="form-control" placeholder="Verify your password"></input>
 
-		<label>
-			<div>Password verification</div>
-			<input type="password" name="verify" value="{{verify}}"></input>
-		</label>
+			<div class="error">{{error}}</div>
 
-		<div class="error">{{error}}</div>
-
-		<input type="submit"></input>
-	</form>
+			<input type="submit" value="Create an account!" class="btn btn-success" id="create-user"></input>
+		</form>
+	</div>
 
 {% endif %}
 {% endblock %}
