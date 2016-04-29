@@ -3,7 +3,7 @@
 	#c8c8c8 	(200,200,200)	light gray
 	#f1eeca 	(241,238,202)	beige
 	#88a7c0 	(136,167,192)	light blue gray
-	#7d9cb4 	(125,156,180)	medium blue gray
+	#5d84a2 	(125,156,180)	medium blue gray
 	#61a5cc light blue
 */
 
@@ -188,25 +188,25 @@ input[type=radio]{
 }
 
 .bg-1 {
-    background-color: #c8c8c8; 
-    color: #7d9cb4;
+    background-color: #e1eaea; 
+    color: #5d84a2;
 }
 .bg-2 {
-    background-color: #d2d2d2;
-    color: #7d9cb4;
+    background-color: #c3d5d5;
+    color: #5d84a2;
 }
 
 h2, h3{
 	/* display: inline-block; */
-	color: #7d9cb4;
+	color: #5d84a2;
 	margin-top: 0px;
 }
 h1{
 	text-align: center;
-	color: #7d9cb4;
+	color: #5d84a2;
 }
 p {
-	color:#88a7c0;
+	color:#5d84a2;
 }
 #main_link{
 	color: #111111;
