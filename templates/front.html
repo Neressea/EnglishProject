@@ -7,7 +7,8 @@
 			<form action="javascript:void(0);" class="form-signin">
 				<h2 class="form-signin-heading">Search filters</h2>
 				<div class="form-group">
-					<input type="text" name="name-input" id="name-input" placeholder="Name of the lesson" class="form-control"/>
+					<label for="theme-input">Name of the lesson</label>
+					<input type="text" name="name-input" id="name-input" placeholder="Ex.: Shakespeare" class="form-control"/>
 					<label for="diff-input">Difficulty of the lesson</label>
 					<select name="diff-input" id="diff-input" class="form-control">
 						<option label=" "></option>
@@ -29,22 +30,24 @@
 				<ul class="list-group">
 					{% if lessons|length > 0 %}
 						<li class="list-group-item" id="lessons-group-title">Lessons you haven't done for the moment</li>
+						{% set i = 0 %}
 						{% for lesson in lessons %}
 							{% if lesson.key().id() not in user.lessons_done %}
-								<a href="/{{lesson.key().id()}}">
-									<li class="list-group-item">
-										<div class="lesson" less-name="{{lesson.title.lower()}}" diff="{{lesson.difficulty}}" theme="{{lesson.dominant}}">
-											<h2><a href="/{{lesson.key().id()}}">{{lesson.title}}</a></h2>
-											<p><span class="{{lesson.difficulty}}">{{lesson.difficulty}}</span><span class="{{lesson.dominant}}">{{lesson.dominant}}</span></p>
-											<p class="created">Posted the {{lesson.created.strftime('%A %d %B %Y')}} at {{lesson.created.strftime('%H:%M:%S')}}</p>
-										</div>
+								<div class="lesson" less-name="{{lesson.title.lower()}}" diff="{{lesson.difficulty}}" theme="{{lesson.dominant}}" onmouseover="white_text({{i}});" onmouseleave="original_text({{i}})" id="display_lesson{{i}}">
+									<li class="list-group-item" onclick="document.location = '/{{lesson.key().id()}}'">
+										<h2><a href="/{{lesson.key().id()}}">{{lesson.title}}</a></h2>
+										<p><span class="{{lesson.difficulty}}">{{lesson.difficulty}}</span><span class="{{lesson.dominant}}">{{lesson.dominant}}</span></p>
+										<p class="created">Posted the {{lesson.created.strftime('%A %d %B %Y')}} at {{lesson.created.strftime('%H:%M:%S')}}</p>
 									</li>
-								</a>							
+								</div>
 							{% endif %}
+							{% set i = i + 1 %}
 						{% endfor %}
 					{% else %}
 						<li class="list-group-item" id="lessons-group-title">We are sorry, but there is no lesson for the moment :(</li>
 					{% endif %}
+
+					<li id="no_lesson_found" class="list-group-item" style="color:red;">We didn't found any lesson, sorry :/</li>
 				</ul>
 			</div>
 
@@ -69,45 +72,68 @@
 	{% endif %}
 
 	<script type="text/javascript">
-			function filterPage(){
-				//We get the fields
-				field_name = $("#name-input").val();
-				field_diff = $("#diff-input").val();
-				field_theme = $("#theme-input").val();
+		function white_text(num){
+			var div = $('#display_lesson'+num);
+			div.find('.created').css("color","white");
+			div.find('a').css("color","white");
+		}
 
-				slct = "div[class=\"lesson\"]";
+		function original_text(num){
+			var div = $('#display_lesson'+num);
+			div.find('.created').css("color","#7d9cb4");
+			div.find('a').css("color","#7d9cb4");
+		}
 
-				if(field_name != ''){
-					slct+="[less-name=\""+field_name.toLowerCase()+"\"]";
-				}
+		function filterPage(){
 
-				if(field_diff != ''){
-					slct+="[diff=\""+field_diff+"\"]";
-				}
+			$('#no_lesson_found').hide('fast');
 
-				if(field_theme != ''){
-					slct+="[theme=\""+field_theme+"\"]";
-				}
+			//We get the fields
+			field_name = $("#name-input").val();
+			field_diff = $("#diff-input").val();
+			field_theme = $("#theme-input").val();
 
-				//We hide everything
-				$(".lesson").hide('fast');
+			slct = "div[class=\"lesson\"]";
 
-				//We show what we want
-				$(slct).show("slow")
+			if(field_name != ''){
+				slct+="[less-name=\""+field_name.toLowerCase()+"\"]";
 			}
 
-			// We add listeners to all fiel of the form
-			$( "#name-input" ).change(function() {
-			  filterPage();
-			});
+			if(field_diff != ''){
+				slct+="[diff=\""+field_diff+"\"]";
+			}
 
-			$( "#diff-input" ).change(function() {
-			  filterPage();
-			});
+			if(field_theme != ''){
+				slct+="[theme=\""+field_theme+"\"]";
+			}
 
-			$( "#theme-input" ).change(function() {
-			  filterPage();
-			});
+			//We hide everything
+			$(".lesson").hide('fast');
+
+			//We show what we want
+			$(slct).show("slow")
+
+			if($(slct).size() == 0){
+				$('#no_lesson_found').show('slow');
+			}
+		}
+
+		// We add listeners to all fiel of the form
+		$( "#name-input" ).change(function() {
+		  filterPage();
+		});
+
+		$( "#diff-input" ).change(function() {
+		  filterPage();
+		});
+
+		$( "#theme-input" ).change(function() {
+		  filterPage();
+		});
+
+		document.addEventListener('DOMContentLoaded', function() {
+           filterPage();
+        }, false);
 
 	</script>
 
