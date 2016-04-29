@@ -5,17 +5,22 @@
 	{% if user %}
 
 		<p>Welcome home, {{user.username}}!</p>
-		<p>This is your account. You can access your progression from here. </p>
+		<p>This is your account. You can see your progression from here. </p>
 		<div>
 			<span>Vocabulary : {{user.grade_vocabulary}}%</span>
 			<span>Grammar : {{user.grade_grammar}}%</span>
 			<span>Comprehension : {{user.grade_comprehension}}%</span>
 		</div>
 
-		<div id="lessons">
+		<div id="lessons" class="container">
+			<ul class="list-group">
+				<li class="list-group-item" id="lessons-group-title">Lessons you have already done</li>
 			{% for lesson in lessons %}
-				<a href="/{{lesson.key().id()}}">{{lesson.title}}</a>
+				<a href="/{{lesson.key().id()}}">
+					<li class="list-group-item"> {{lesson.title}}</li>
+				</a>
 			{% endfor %}
+			</ul>
 		</div>
 	{% else %}
 		<p class="error">You must be authentified.</p>

@@ -33,6 +33,7 @@
 			<li class="{{active[3]}}"><a href="/account">My Account</a></li>
 			<li class="{{active[4]}}"><a href="/logout">Logout</a></li>
 	    </ul>
+	    <span class="navbar-brand" style="float:right;">Welcome, {{user.username}}!</span>
 	  </div>
 	</nav>
 
@@ -42,6 +43,7 @@
 		    <ul class="nav navbar-nav nav-pills">
 		    	<li><a class="navbar-brand" href="/" id="main_link">{{sitename}}</a></li>
 		    </ul>
+		    <span class="navbar-brand" style="float:right;">Your aren't connected :'(</span>
 		  </div>
 		</nav>
 	{% endif %}
