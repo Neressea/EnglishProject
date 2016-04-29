@@ -79,26 +79,28 @@ class TrainingHandler(Handler):
 				if lessons[i].key().id() not in user.lessons_done:
 					lesson = lessons[i]
 				i = i + 1
-
-		while lesson is None:
+		stories = []
+		if lesson is None:
 			lessons = db.GqlQuery("SELECT * FROM Lesson ").fetch(100)
-			rng = random.randint(0, len(lessons)-1)
-			lesson = lessons[rng] if lessons[rng].key().id() not in user.lessons_done else None
-			training = "FAIL"
+			if lessons is None or len(lessons) == 0:
+				training = "NO_ONE"
+			else:
+				rng = random.randint(0, len(lessons)-1)
+				lesson = lessons[rng] if lessons[rng].key().id() not in user.lessons_done else None
+				training = "FAIL"			
+				#On récupère toutes les histoires liées à la leçon
+				stories = db.GqlQuery("SELECT * FROM Story WHERE id_lesson = :1", lesson.key().id()).fetch(100)
 
-		#On récupère toutes les histoires liées à la leçon
-		stories = db.GqlQuery("SELECT * FROM Story WHERE id_lesson = :1", lesson.key().id()).fetch(100)
+				begin = re.escape("[hole]")
+				end = re.escape("[/hole]")
+				search = begin + '.*?' + end
 
-		begin = re.escape("[hole]")
-		end = re.escape("[/hole]")
-		search = begin + '.*?' + end
+				for i in range(0, len(stories)):
+					if stories[i].type_of_story == "video":
+						stories[i].text = re.sub(re.escape("watch?v="), "embed/", stories[i].text) 
 
-		for i in range(0, len(stories)):
-			if stories[i].type_of_story == "video":
-				stories[i].text = re.sub(re.escape("watch?v="), "embed/", stories[i].text) 
-
-			for j in range(0, len(stories[i].questions_vocabulary)):
-				stories[i].questions_vocabulary[j] = re.sub(search, "<input type=\"text\" id=\"vocabulary-answer%d%d\" name=\"vocabulary-answer%d%d\"/>" % (i+1, j+1, i+1, j+1), stories[i].questions_vocabulary[j])
+					for j in range(0, len(stories[i].questions_vocabulary)):
+						stories[i].questions_vocabulary[j] = re.sub(search, "<input type=\"text\" id=\"vocabulary-answer%d%d\" name=\"vocabulary-answer%d%d\"/>" % (i+1, j+1, i+1, j+1), stories[i].questions_vocabulary[j])
 
 		#On renvoie le template avec la leçon et le thème proposé 
 		self.render("lesson.html", lesson=lesson, stories=stories, training=training)

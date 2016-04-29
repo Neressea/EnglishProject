@@ -26,6 +26,7 @@ jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), a
 
 #Une leçon est liée à des histoires par la base de données (id)
 class Lesson(db.Model):
+	created_by = db.StringProperty(required = True)
 	difficulty = db.StringProperty(required = True, choices=set(["Easy", "Medium", "Hard"]))
 	title = db.StringProperty(required = True)
 	created = db.DateTimeProperty(auto_now_add = True)
@@ -63,11 +64,18 @@ class CreateLesson(Handler):
 		if not cookie:
 			self.redirect('/')
 
+		secure_val = check_secure_val(cookie)
+		if secure_val:
+			id = int(secure_val)
+			user = User.get_by_id(id)
+		else:
+			self.redirect('/')
+
 		title = self.request.get("title")
 		difficulty = self.request.get("difficulty")
 
 		#On commence par créer la leçon
-		lesson = Lesson(difficulty = difficulty, title = title)
+		lesson = Lesson(difficulty = difficulty, title = title, created_by = user.username)
 		lesson.put()
 		id_lesson = lesson.key().id()
 

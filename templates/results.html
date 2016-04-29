@@ -109,7 +109,7 @@
 			</div>
 
 		{% endfor %}
-		<p class="created">Posted the {{lesson.created.strftime('%A %d %B %Y')}} at {{lesson.created.strftime('%H:%M:%S')}}</p>
+		<p class="created">Posted by {{lesson.created_by}} the {{lesson.created.strftime('%A %d %B %Y')}} at {{lesson.created.strftime('%H:%M:%S')}}</p>
 	</div>
 
 {% endblock %}
