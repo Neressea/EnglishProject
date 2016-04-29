@@ -30,7 +30,7 @@ class Lesson(db.Model):
 	title = db.StringProperty(required = True)
 	created = db.DateTimeProperty(auto_now_add = True)
 	last_modified = db.DateTimeProperty(auto_now = True)
-	dominant = db.StringProperty(choices=set(["Vocabulary", "Grammar", "Comprehension"]))
+	dominant = db.StringProperty(choices=set(["Vocabulary", "Grammar", "Comprehension", "Balanced"]))
 
 class Story(db.Model):
 	id_lesson = db.IntegerProperty(required = True)
@@ -117,8 +117,10 @@ class CreateLesson(Handler):
 			lesson.dominant = "Vocabulary"
 		elif nb_questions[1] > nb_questions[0] and nb_questions[1]>nb_questions[2]:
 			lesson.dominant = "Grammar"
-		else:
+		elif nb_questions[2] > nb_questions[0] and nb_questions[2]>nb_questions[1]:
 			lesson.dominant = "Comprehension"
+		else:
+			lesson.dominant = "Balanced" #C'est équilibré.
 
 		lesson.put()
 

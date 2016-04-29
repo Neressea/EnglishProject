@@ -104,7 +104,10 @@
 			}
 
 			if(field_theme != ''){
+				select_balanced = slct;
+				select_balanced+="[theme=\"Balanced\"]";
 				slct+="[theme=\""+field_theme+"\"]";
+				slct+=', '+select_balanced;
 			}
 
 			//We hide everything
