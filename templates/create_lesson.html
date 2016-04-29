@@ -7,9 +7,9 @@
 		<form method="post" action="/newlesson">
 			<fieldset class="form-group centerize"> 
 				<label for="title">Title</label>
-				<input class="form-control" type="text" name="title" value="{{title}}" placeholder="Title of your Lesson"/>			
+				<input class="form-control" type="text" name="title" value="{{title}}" placeholder="Title of your Lesson" required=""/>			
 				<label for="difficulty">Difficulty</label>
-				<select class="form-control smallform" name="difficulty">
+				<select class="form-control" name="difficulty">
 					<option selected="selected" value="Easy">Easy</option>
 					<option value="Medium">Medium</option>
 					<option value="Hard">Hard</option>
@@ -42,9 +42,9 @@
 			var content = block.val();
 
 			if(type == "video"){
-				block.replaceWith("<input type=\"text\" class=\"form-control\" name=\"story_text\" placeholder=\" Write or copy/paste the URL of youtube video\" id=\"story_text"+number+"\" value=\""+content+"\">");
+				block.replaceWith("<input type=\"text\" class=\"form-control\" name=\"story_text\" placeholder=\" Write or copy/paste the URL of youtube video\" id=\"story_text"+number+"\" value=\""+content+"\" required=\"\">");
 			}else{
-				block.replaceWith("<textarea class=\"form-control\" name=\"story_text\" placeholder=\" Write or copy/paste a story\" id=\"story_text"+number+"\">"+content+"</textarea>");
+				block.replaceWith("<textarea class=\"form-control\" name=\"story_text\" placeholder=\" Write or copy/paste a story\" id=\"story_text"+number+"\" required=\"\">"+content+"</textarea>");
 			}
 
 			changeContent(number);
@@ -71,14 +71,14 @@
 					+"<h2>Story "+number+"</h2>\n"
 					+"<fieldset class=\"form-group centerize\">"
 						+"<label for=\"title_story"+number+"\"> Title </label>\n"
-						+"<input class=\"form-control\" type=\"text\" name=\"title_story"+number+"\" id=\"title_story"+number+"\" placeholder=\"Title of the story\"/>"
+						+"<input class=\"form-control\" type=\"text\" name=\"title_story"+number+"\" id=\"title_story"+number+"\" placeholder=\"Title of the story\" required=\"\"/>"
 						+"<label for=\"type_of_story"+number+"\">Type of story</label>"
-						+"<select class=\"form-control smallform\" name=\"type_of_story"+number+"\" id=\"type_of_story"+number+"\" class=\"type_of_story\" onchange=\"changeTypeStory("+number+");\">"
+						+"<select class=\"form-control\" name=\"type_of_story"+number+"\" id=\"type_of_story"+number+"\" class=\"type_of_story\" onchange=\"changeTypeStory("+number+");\">"
 						+"<option value=\"text\" selected=\"selected\">Text</option>"
 						+"<option value=\"video\">Video</option>"
 						+"</select>"
 						+"<label for=\"story_text\">Text of the story</label>\n"
-						+"<textarea class=\"form-control\" name=\"story_text\" placeholder=\" Write or copy/paste a story\" id=\"story_text"+number+"\"></textarea>\n"
+						+"<textarea class=\"form-control\" name=\"story_text\" placeholder=\" Write or copy/paste a story\" id=\"story_text"+number+"\" required=\"\"></textarea>\n"
 						+"<label for=\"preview"+number+"\">Preview of the story</label>"
 						+"<div><pre id=\"preview"+number+"\"\"></pre></div>"
 					+"</fieldset>"
@@ -166,7 +166,7 @@
 				+"<hr width=\"10%\"/>"
 				+"<fieldset class=\"form-group centerize\">"
 				+ "<label for=\"vocabulary-question"+num_story+"\"> Question "+number+" :</label>\n"
-				+ "<textarea class=\"vocabulary-text form-control\" name=\"vocabulary-question"+num_story+"\" placeholder=\"Write your text, and surround the word you want to make holes with [hole][/hole]\"></textarea>\n"
+				+ "<textarea class=\"vocabulary-text form-control\" name=\"vocabulary-question"+num_story+"\" placeholder=\"Write your text, and surround the word you want to make holes with [hole][/hole]\" required=\"\"></textarea>\n"
 				+"</fieldset>"
 				+ "</div>\n";
 
@@ -185,15 +185,15 @@
 				+"<hr width=\"10%\"/>"
 				+"<fieldset class=\"form-group centerize\">"
 				+"<label for=\"\">The question : </label>"
-				+"<input class=\"form-control\" type=\"text\" name=\"grammar-question"+num_story+"\" placeholder=\"ex: This year, I have ___ responsibilities\"/><br />"
+				+"<input class=\"form-control\" type=\"text\" name=\"grammar-question"+num_story+"\" placeholder=\"ex: This year, I have ___ responsibilities\" required=\"\"/><br />"
 				+"<label>The correct answer : </label>"
-				+"<input class=\"form-control\" type=\"text\" name=\"grammar-answer"+num_story+""+number+"\" placeholder=\"ex: taken\"/><br />\n"
+				+"<input class=\"form-control\" type=\"text\" name=\"grammar-answer"+num_story+""+number+"\" placeholder=\"ex: taken\" required=\"\"/><br />\n"
 				+"<label>A wrong answer : </label>"
-				+"<input class=\"form-control\" type=\"text\" name=\"grammar-answer"+num_story+""+number+"\" placeholder=\"ex: took\"/><br />\n"
+				+"<input class=\"form-control\" type=\"text\" name=\"grammar-answer"+num_story+""+number+"\" placeholder=\"ex: took\" required=\"\"/><br />\n"
 				+"<label>A wrong answer : </label>"
-				+"<input class=\"form-control\" type=\"text\" name=\"grammar-answer"+num_story+""+number+"\" placeholder=\"ex: taked\"/><br />\n"
+				+"<input class=\"form-control\" type=\"text\" name=\"grammar-answer"+num_story+""+number+"\" placeholder=\"ex: taked\" required=\"\"/><br />\n"
 				+"<label>A wrong answer : </label>"
-				+"<input class=\"form-control\" type=\"text\" name=\"grammar-answer"+num_story+""+number+"\" placeholder=\"ex: take\"/><br />\n"
+				+"<input class=\"form-control\" type=\"text\" name=\"grammar-answer"+num_story+""+number+"\" placeholder=\"ex: take\" required=\"\"/><br />\n"
 				+"</fieldset>"
 				+"</div>\n";
 
@@ -212,9 +212,9 @@
 				+"<hr width=\"10%\"/>"
 				+"<fieldset class=\"form-group centerize\">"
 				+"<label for=\"comprehension-question"+num_story+"\"> Question "+number+"</label>\n"
-				+"<input class=\"form-control\" type=\"text\" name=\"comprehension-question"+num_story+"\" placeholder=\"ex: Who invented the zipper ? \" />\n"
+				+"<input class=\"form-control\" type=\"text\" name=\"comprehension-question"+num_story+"\" placeholder=\"ex: Who invented the zipper ? \" required=\"\"/>\n"
 				+"<label for=\"comprehension-answer"+num_story+"\">The answer</label>"
-				+"<input class=\"form-control\" type=\"text\" name=\"comprehension-answer"+num_story+"\" placeholder=\"ex: Gideon Sundback\" />\n"
+				+"<input class=\"form-control\" type=\"text\" name=\"comprehension-answer"+num_story+"\" placeholder=\"ex: Gideon Sundback\" required=\"\"/>\n"
 				+"</fieldset>"
 				+"</div>\n";
 
