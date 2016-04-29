@@ -223,6 +223,8 @@ class CheckHandler(Handler):
 
 			if stories_correction[i].type_of_story == "video":
 				stories_correction[i].text = re.sub(re.escape("watch?v="), "embed/", stories_correction[i].text) 
+				stories_correction[i].text = re.sub(re.escape("://m."), "://www.", stories_correction[i].text) 
+				stories_correction[i].text = re.sub(re.escape("://youtu.be/"), "://www.youtube.com/embed/", stories_correction[i].text) 
 
 		percentages = [0, 0, 0]
 		percentages[0] = int(((sum(vocabulary_results) +0.0) / len(vocabulary_results))) * 100 if len(vocabulary_results) > 0 else 0
@@ -265,5 +267,7 @@ class LessonPage(Handler):
 
 			for j in range(0, len(stories[i].questions_vocabulary)):
 				stories[i].questions_vocabulary[j] = re.sub(search, "<input type=\"text\" id=\"vocabulary-answer%d%d\" name=\"vocabulary-answer%d%d\" class=\"form-control voca_hole\"/>" % (i+1, j+1, i+1, j+1), stories[i].questions_vocabulary[j])
+				stories[i].text = re.sub(re.escape("://m."), "://www.", stories[i].text) 
+				stories[i].text = re.sub(re.escape("://youtu.be/"), "://www.youtube.com/embed/", stories[i].text) 
 
 		self.render("lesson.html", lesson=lesson, stories=stories)

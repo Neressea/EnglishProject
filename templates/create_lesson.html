@@ -57,7 +57,11 @@
 			var content = $("#story_text"+number).val();
 			if(type == "video"){
 				content = content.replace("watch?v=", "embed/");
+				content = content.replace("://m.", "://www.");
+				content = content.replace("://youtu.be/", "://www.youtube.com/embed/");
+
 				prev.replaceWith("<iframe class=\"embed-responsive-item\" src=\""+content+"\" frameborder=\"0\" id=\"preview"+number+"\" width=\"480\" height=\"350\" allowfullscreen></iframe>");
+				$('#preview'+number).toggle().toggle();
 			}else{
 				prev.replaceWith("<pre id=\"preview"+number+"\">"+content+"</pre>");
 			}

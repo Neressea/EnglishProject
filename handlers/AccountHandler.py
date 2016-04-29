@@ -89,10 +89,13 @@ class TrainingHandler(Handler):
 		else:
 			lesson = None
 						
-			while i < len(lessons) and lesson is None:
-				if lessons[i].key().id() not in user.lessons_done:
-					lesson = lessons[i]
-				i = i + 1
+			ids = range(0, len(lessons)-1)
+			while len(ids) > 0 and lesson is None:
+				rng = random.randint(0, len(ids)-1)
+				ind = ids[rng]
+				if lessons[ind].key().id() not in user.lessons_done:
+					lesson = lessons[ind]
+				del ids[rng]
 
 			if lesson is None:
 				training = "NO_ONE"
