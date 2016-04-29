@@ -196,8 +196,8 @@ class CheckHandler(Handler):
 						vocabulary_parts[i+j]+="<input class=\"answer_true\" type=\"text\" name=\"pseudo\" value=\""+vcbl_ans[len(vcbl_ans)-1]+"\" disabled=\"disabled\" />"
 					else:
 						vocabulary_results.append(0)
-						vocabulary_parts[i+j]+="<input class=\"answer_false\" type=\"text\" name=\"pseudo\" value=\""+vcbl_ans[len(vcbl_ans)-1]+"\" disabled=\"disabled\" />"
-						vocabulary_parts[i+j]+="<input class=\"answer_true\" type=\"text\" name=\"pseudo\" value=\""+to_find[k]+"\" disabled=\"disabled\" />"
+						vocabulary_parts[i+j]+="<input class=\"answer_false voca_hole form-control\" type=\"text\" name=\"pseudo\" value=\""+vcbl_ans[len(vcbl_ans)-1]+"\" disabled=\"disabled\" />"
+						vocabulary_parts[i+j]+="<input class=\"answer_true voca_hole form-control\" type=\"text\" name=\"pseudo\" value=\""+to_find[k]+"\" disabled=\"disabled\" />"
 
 			#On parcourt toutes les QCMs
 			QCMs = stories_correction[i].questions_grammar
@@ -217,9 +217,9 @@ class CheckHandler(Handler):
 				stories_correction[i].text = re.sub(re.escape("watch?v="), "embed/", stories_correction[i].text) 
 
 		percentages = [0, 0, 0]
-		percentages[0] = ((sum(vocabulary_results) +0.0) / len(vocabulary_results)) * 100 if len(vocabulary_results) > 0 else 0
-		percentages[1] = (sum(grammar_results) +0.0) / len(grammar_results) * 100
-		percentages[2] = (sum(comprehension_results) +0.0) / len(comprehension_results) * 100
+		percentages[0] = int(((sum(vocabulary_results) +0.0) / len(vocabulary_results))) * 100 if len(vocabulary_results) > 0 else 0
+		percentages[1] = int((sum(grammar_results) +0.0) / len(grammar_results) * 100)
+		percentages[2] = int((sum(comprehension_results) +0.0) / len(comprehension_results) * 100)
 
 		#On met à jour les notes
 		user.grade_vocabulary = int((user.grade_vocabulary * len(user.lessons_done) + percentages[0]) / (len(user.lessons_done) + 1))
@@ -256,6 +256,6 @@ class LessonPage(Handler):
 				stories[i].text = re.sub(re.escape("watch?v="), "embed/", stories[i].text) 
 
 			for j in range(0, len(stories[i].questions_vocabulary)):
-				stories[i].questions_vocabulary[j] = re.sub(search, "<input type=\"text\" id=\"vocabulary-answer%d%d\" name=\"vocabulary-answer%d%d\"/>" % (i+1, j+1, i+1, j+1), stories[i].questions_vocabulary[j])
+				stories[i].questions_vocabulary[j] = re.sub(search, "<input type=\"text\" id=\"vocabulary-answer%d%d\" name=\"vocabulary-answer%d%d\" class=\"form-control voca_hole\"/>" % (i+1, j+1, i+1, j+1), stories[i].questions_vocabulary[j])
 
 		self.render("lesson.html", lesson=lesson, stories=stories)

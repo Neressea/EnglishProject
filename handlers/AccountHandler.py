@@ -36,6 +36,8 @@ class AccountHandler(Handler):
 				lesson = Lesson.get_by_id(lessons_ids[i])
 				lessons.append(lesson)
 
+		lessons.reverse()
+
 		self.render("account.html", lessons=lessons)
 
 class TrainingHandler(Handler):
@@ -65,7 +67,7 @@ class TrainingHandler(Handler):
 		#On récupère dans la BD une leçon où la proportion de questions sur ce thème est le plus important et qu'il n'a pas déjà faite
 		lessons = None
 		try:
-			lessons = db.GqlQuery("SELECT * FROM Lesson WHERE dominant = %s" % training).fetch(100)
+			lessons = db.GqlQuery("SELECT * FROM Lesson WHERE dominant = :1", training).fetch(100)
 		except db.BadQueryError:
 			lessons = None
 

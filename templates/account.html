@@ -22,12 +22,12 @@
 		</div>
 
 		<div id="lessons" class="container">
-			<ul class="list-group">
+			<ul class="list-group" >
 				{% if lessons|length > 0 %}
-					<li class="list-group-item" id="lessons-group-title">Lessons you have already done</li>
+					<li class="list-group-item" id="lessons-group-title">Lessons you have already done : {{lessons|length}}</li>
 					{% for lesson in lessons %}
-						<a href="/{{lesson.key().id()}}">
-							<li class="list-group-item"> {{lesson.title}}</li>
+				   		<a href="/{{lesson.key().id()}}" style="text-align: center">
+							<li class="list-group-item" >  <span class="wrap"><span>{{lesson.title}}</span><span class="{{lesson.difficulty}}">{{lesson.difficulty}}</span><span class="{{lesson.dominant}}">{{lesson.dominant}}</span></span></li>
 						</a>
 					{% endfor %}
 				{% else %}

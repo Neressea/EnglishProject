@@ -1,33 +1,33 @@
 {% extends "base.html" %}
 {% block content %}
 
-	<form class="lesson" method="post" action="/check" id="lesson_form">
+	<form class="lesson" method="post" action="/check" id="lesson_form" class="">
 		<input type="hidden" name="id-lesson" value="{{lesson.key().id()}}" />
 
 		{% if training %}
 			{% if training == "FAIL" %}
-				<p>We are sorry, but we did'nt find a lesson for your needs that you haven't done. So here is another lesson.</p>
+				<p style="color:red;">We are sorry, but we did'nt find a lesson for your needs that you haven't done. So here is another lesson.</p>
 			{% else %}
-				<p>Welcome to our training session, sir! We have the feeling that you have to improve your {{training}} skills, so here is a lesson we chose just for you !</p>
+				<p style="color:green;">Welcome to our training session, sir! We have the feeling that you have to improve your {{training}} skills, so here is a lesson we chose just for you !</p>
 			{% endif %}
 		{% endif %}
 
-		<h1 class="lesson-title">{{lesson.title}}</h1>
-		<p><span>{{lesson.difficulty}}</span> / <span>{{lesson.dominant}}</span></p>
+		<h1 class="lesson-title">Lesson : {{lesson.title}}</h1>
+		<p><span class="{{lesson.difficulty}}">{{lesson.difficulty}}</span><span class="{{lesson.dominant}}">{{lesson.dominant}}</span></p>
 
 		{% set i = 0 %}
 		{% for story in stories %}
 			{% set i = i + 1 %}
 			<div class="container-fluid bg-1 story text-center" id="story{{i}}">
-				<h2>{{story.title}}</h2>
+				<h2>Story {{i}} : {{story.title}}</h2>
 				<div class="centerize">
-				{% if story.type_of_story == "video" %}
-					<div class="embed-responsive embed-responsive-16by9">
-						<iframe class="embed-responsive-item" src="{{story.text}}" frameborder="0" allowfullscreen></iframe>
-					</div>
-				{% else %}
-					<pre class=text-justify>{{story.text}}</pre>
-				{% endif %}
+					{% if story.type_of_story == "video" %}
+						<div class="embed-responsive embed-responsive-16by9">
+							<iframe class="embed-responsive-item" src="{{story.text}}" frameborder="0" allowfullscreen></iframe>
+						</div>
+					{% else %}
+						<pre class="text-justify">{{story.text}}</pre>
+					{% endif %}
 				</div>
 			</div>
 			<div class="container-fluid bg-2 text-center">
@@ -65,11 +65,16 @@
 
 							{% set a = answers.pop(0) %}
 
-							<label for="grammar-answer{{i}}{{j}}">Your answer: </label>
-
-							{% for ans in answers|shuffle %}
-								<input type="radio" name="grammar-answer{{i}}{{j}}" value="{{ans}}">{{ans}}</input>
-							{% endfor %}
+							<label for="grammar-answer{{i}}{{j}}">Your answer: </label> <br />
+							<div class="container">
+								<table style="display: inline-block; text-align: left;">
+									{% for ans in answers|shuffle %}
+										<tr> 
+									   		<td> <input type="radio" name="grammar-answer{{i}}{{j}}" value="{{ans}}" >   {{ans}}</input></td>
+									   	</tr>
+									{% endfor %}
+								</table>
+							</div>
 						</div>
 
 					{% endfor %}
@@ -83,10 +88,10 @@
 						{% set j = j+1 %}
 						<h5>Question {{j}}</h5>
 
-						<div class="comprehension-question" id="comprehension-question{{i}}{{j}}">
+						<div class="comprehension-question container" id="comprehension-question{{i}}{{j}}" style="width:50%">
 							<p>{{compr.split("|")[0]}}</p>
 							<label for="comprehension-answer{{i}}{{j}}">Your answer: </label>
-							<input type="text" name="comprehension-answer{{i}}{{j}}" id="comprehension-answer{{i}}{{j}}" />
+							<input type="text" name="comprehension-answer{{i}}{{j}}" id="comprehension-answer{{i}}{{j}}" class="form-control"/>
 						</div>
 
 					{% endfor %}
