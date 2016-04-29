@@ -2,54 +2,55 @@
 {% block content %}
 
 	{% if user %}
-		<form class="menu" action="javascript:void(0);">
-			<h2>Search filters</h2> <br />
-			<label for="name-input">Name of the lesson : </label><input type="text" name="name-input" id="name-input"/><br/>
-			<label for="diff-input">Difficulty of the lesson : </label>
-			<select name="diff-input" id="diff-input">
-				<option label=" "></option>
-				<option value="Easy">Easy</option>
-				<option value="Medium">Medium</option>
-				<option value="Hard">Hard</option>
-			</select>
-			<br/>
-			<label for="theme-input">Theme of the lesson : </label>
-			<select name="theme-input" id="theme-input">
-				<option label=" "></option>
-				<option value="Vocabulary">Vocabulary</option>
-				<option value="Grammar">Grammar</option>
-				<option value="Comprehension">Comprehension</option>
-			</select>
-			<br/>
-		</form>
-		{% for lesson in lessons %}
-			{% if lesson.key().id() not in user.lessons_done %}
-				<div class="lesson" less-name="{{lesson.title.lower()}}" diff="{{lesson.difficulty}}" theme="{{lesson.dominant}}">
-					<h2><a href="/{{lesson.key().id()}}">{{lesson.title}}</a></h2>
-					<p><span>{{lesson.difficulty}}</span> / <span>{{lesson.dominant}}</span></p>
-					<p class="created">Posted the {{lesson.created.strftime('%A %d %B %Y')}} at {{lesson.created.strftime('%H:%M:%S')}}</p>
+		<div class="container">
+			<form action="javascript:void(0);" class="form-signin">
+				<h2 class="form-signin-heading">Search filters</h2>
+				<div class="form-group">
+					<input type="text" name="name-input" id="name-input" placeholder="Name of the lesson" class="form-control"/>
+					<label for="diff-input">Difficulty of the lesson</label>
+					<select name="diff-input" id="diff-input" class="form-control">
+						<option label=" "></option>
+						<option value="Easy">Easy</option>
+						<option value="Medium">Medium</option>
+						<option value="Hard">Hard</option>
+					</select>
+					<label for="theme-input">Theme of the lesson</label>
+					<select name="theme-input" id="theme-input" class="form-control">
+						<option label=" "></option>
+						<option value="Vocabulary">Vocabulary</option>
+						<option value="Grammar">Grammar</option>
+						<option value="Comprehension">Comprehension</option>
+					</select>
 				</div>
-			{% endif %}
-		{% endfor %}
+			</form>
+			{% for lesson in lessons %}
+				{% if lesson.key().id() not in user.lessons_done %}
+					<div class="lesson" less-name="{{lesson.title.lower()}}" diff="{{lesson.difficulty}}" theme="{{lesson.dominant}}">
+						<h2><a href="/{{lesson.key().id()}}">{{lesson.title}}</a></h2>
+						<p><span>{{lesson.difficulty}}</span> / <span>{{lesson.dominant}}</span></p>
+						<p class="created">Posted the {{lesson.created.strftime('%A %d %B %Y')}} at {{lesson.created.strftime('%H:%M:%S')}}</p>
+					</div>
+				{% endif %}
+			{% endfor %}
 
-		
+		</div>
 
 	{% else %}
-	<div class="container">
-		<form method="post" action="/login" class="form-signin">
-			<h2 class="form-signin-heading">Please sign in</h2>
-				<div class="form-group">
-					<input type="text" name="username" value="{{username}}" class="form-control" placeholder="Username" autofocus="" required=""></input>
-					<input type="password" name="password" value="{{password}}" class="form-control" placeholder="Password" required=""></input>
-				</div>
+		<div class="container">
+			<form method="post" action="/login" class="form-signin">
+				<h2 class="form-signin-heading">Please sign in</h2>
+					<div class="form-group">
+						<input type="text" name="username" value="{{username}}" class="form-control" placeholder="Username" autofocus="" required=""></input>
+						<input type="password" name="password" value="{{password}}" class="form-control" placeholder="Password" required=""></input>
+					</div>
 
-			<div class="error">{{error}}</div>
+				<div class="error">{{error}}</div>
 
-			<button type="submit" class="btn btn-primary"> Connect </button>
-			<button class="btn btn-success" onclick="document.location.href='/signup';">Create an account</button>
-		</form>
-		
-	</div>
+				<button type="submit" class="btn btn-primary"> Connect </button>
+				<button class="btn btn-success" onclick="document.location.href='/signup';">Create an account</button>
+			</form>
+			
+		</div>
 	{% endif %}
 
 	<script type="text/javascript">

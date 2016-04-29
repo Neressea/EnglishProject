@@ -104,6 +104,7 @@ body{
 #main-nav > .active > a:hover,
 #main-nav > .active > a:focus{
 	background-color: #61a5cc;
+	color:white;
 }
 
 .btn-primary {

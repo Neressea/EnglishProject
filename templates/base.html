@@ -37,9 +37,13 @@
 	</nav>
 
 	{% else %}
-		<ul class="nav nav-pills">
-			<li><a href="/" id="main_link">{{sitename}}</a></li>
-		</ul>
+		<nav class="navbar navbar-default">
+		  <div class="container-fluid">
+		    <ul class="nav navbar-nav nav-pills">
+		    	<li><a class="navbar-brand" href="/" id="main_link">{{sitename}}</a></li>
+		    </ul>
+		  </div>
+		</nav>
 	{% endif %}
 
 	{% block content %}
