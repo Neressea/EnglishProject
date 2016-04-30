@@ -212,12 +212,14 @@ class CheckHandler(Handler):
 				gramm_ans.append(self.request.get("grammar-answer%d%d" % (i+1, j+1)))
 				grammar_results.append(1 if QCMs[j].split("|")[1] == gramm_ans[i+j] else 0)
 
-			#On parcourt toutes les questions directes
+			#On récupère toutes les questions directes
 			comprehensions = stories_correction[i].questions_comprehension
+			#On parcourt toutes les directes de l'histoire courante
+			current_comp_quests = self.request.get_all("comprehension-answer" + str(i+1))
 			for j in range(0, len(comprehensions)):
 				#On récupère la réponse à la question courante
-				cpr_ans.append(self.request.get("comprehension-answer%d%d" % (i+1, j+1)))
-				comprehension_results.append(1 if comprehensions[j].split("|")[1].lower() == cpr_ans[i+j].lower() else 0)
+				cpr_ans.append(current_comp_quests[j])
+				comprehension_results.append(1 if comprehensions[j].split("|")[1].lower() == current_comp_quests[j].lower() else 0)
 
 			if stories_correction[i].type_of_story == "video":
 				stories_correction[i].text = re.sub(re.escape("watch?v="), "embed/", stories_correction[i].text) 

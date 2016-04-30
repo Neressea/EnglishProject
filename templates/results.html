@@ -1,6 +1,8 @@
 {%extends "base.html" %}
 {% block content %}
 
+	{% set count = [0] %}
+
 	<div class="results" >
 		<p class="info">
 			Congratulation! You finished the lesson. It will now disappear from your trainings.
@@ -96,12 +98,14 @@
 						<div class="comprehension-answer container" id="comprehension-answer{{i}}{{j}}" style="width:50%">
 							<p>{{compr.split("|")[0]}}</p>
 
-							{% if compr.split("|")[1].lower() == comprehension_got[i-1+j-1].lower() %}
-								<input class="answer_true form-control" type="text" name="pseudo" value="{{comprehension_got[i-1+j-1]}}" disabled="disabled" />
+							{% if compr.split("|")[1].lower() == comprehension_got[count[0]].lower() %}
+								<input class="answer_true form-control" type="text" name="pseudo" value="{{comprehension_got[count[0]]}}" disabled="disabled" />
 							{% else %}
-								<input class="answer_false form-control" type="text" name="pseudo" value="{{comprehension_got[i-1+j-1]}}" disabled="disabled" />
+								<input class="answer_false form-control" type="text" name="pseudo" value="{{comprehension_got[count[0]]}}" disabled="disabled" />
 								<input class="answer_true form-control" type="text" name="pseudo" value="{{compr.split("|")[1]}}" disabled="disabled" />
 							{% endif %}
+							{% if count.append(count.pop() + 1) %}{% endif %}
+							{{count}}
 						</div>
 
 					{% endfor %}
