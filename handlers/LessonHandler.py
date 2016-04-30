@@ -225,7 +225,8 @@ class CheckHandler(Handler):
 				stories_correction[i].text = re.sub(re.escape("://youtu.be/"), "://www.youtube.com/embed/", stories_correction[i].text) 
 
 		percentages = [0, 0, 0]
-		percentages[0] = int(((sum(vocabulary_results) +0.0) / len(vocabulary_results))) * 100 if len(vocabulary_results) > 0 else 0
+		logging.error(len(vocabulary_results))
+		percentages[0] = int(((sum(vocabulary_results) +0.0) / len(vocabulary_results)) * 100)  if len(vocabulary_results) > 0 else 0
 		percentages[1] = int((sum(grammar_results) +0.0) / len(grammar_results) * 100)
 		percentages[2] = int((sum(comprehension_results) +0.0) / len(comprehension_results) * 100)
 
