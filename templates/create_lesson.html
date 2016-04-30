@@ -63,7 +63,8 @@
 				prev.replaceWith("<iframe class=\"embed-responsive-item\" src=\""+content+"\" frameborder=\"0\" id=\"preview"+number+"\" width=\"480\" height=\"350\" allowfullscreen></iframe>");
 				$('#preview'+number).toggle().toggle();
 			}else{
-				prev.replaceWith("<pre id=\"preview"+number+"\">"+content+"</pre>");
+				content = content.replace(/\n/g, "<br />");
+				prev.replaceWith("<p align=\"justify\" id=\"preview"+number+"\">"+content+"</p>");
 			}
 		}
 
@@ -84,7 +85,7 @@
 						+"<label for=\"story_text\">Text of the story</label>\n"
 						+"<textarea class=\"form-control\" name=\"story_text\" placeholder=\" Write or copy/paste a story\" id=\"story_text"+number+"\" required=\"\"></textarea>\n"
 						+"<label for=\"preview"+number+"\">Preview of the story</label>"
-						+"<div><pre id=\"preview"+number+"\"\"></pre></div>"
+						+"<div><p align=\"justify\" id=\"preview"+number+"\"\"></p></div>"
 					+"</fieldset>"
 					+"<div class=\"questions bg-2\">\n"
 						+"<h3>Questions</h3>\n"
