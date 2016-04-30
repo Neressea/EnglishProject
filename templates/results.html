@@ -96,7 +96,7 @@
 						<div class="comprehension-answer container" id="comprehension-answer{{i}}{{j}}" style="width:50%">
 							<p>{{compr.split("|")[0]}}</p>
 
-							{% if compr.split("|")[1] == comprehension_got[i-1+j-1] %}
+							{% if compr.split("|")[1].lower() == comprehension_got[i-1+j-1].lower() %}
 								<input class="answer_true form-control" type="text" name="pseudo" value="{{comprehension_got[i-1+j-1]}}" disabled="disabled" />
 							{% else %}
 								<input class="answer_false form-control" type="text" name="pseudo" value="{{comprehension_got[i-1+j-1]}}" disabled="disabled" />

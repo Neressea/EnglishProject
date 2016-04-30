@@ -197,9 +197,7 @@ class CheckHandler(Handler):
 					to_find[k] = to_find[k].replace('[hole]', '')
 					to_find[k] = to_find[k].replace('[/hole]', '')
 
-					logging.error(vcbl_ans[len(vcbl_ans)-1])
-
-					if to_find[k] == vcbl_ans[len(vcbl_ans)-1]:
+					if to_find[k].lower() == vcbl_ans[len(vcbl_ans)-1].lower():
 						vocabulary_results.append(1)
 						vocabulary_parts[i+j]+="<input class=\"answer_true voca_hole form-control\" type=\"text\" name=\"pseudo\" value=\""+vcbl_ans[len(vcbl_ans)-1]+"\" disabled=\"disabled\" />"
 					else:
@@ -219,7 +217,7 @@ class CheckHandler(Handler):
 			for j in range(0, len(comprehensions)):
 				#On récupère la réponse à la question courante
 				cpr_ans.append(self.request.get("comprehension-answer%d%d" % (i+1, j+1)))
-				comprehension_results.append(1 if comprehensions[j].split("|")[1] == cpr_ans[i+j] else 0)
+				comprehension_results.append(1 if comprehensions[j].split("|")[1].lower() == cpr_ans[i+j].lower() else 0)
 
 			if stories_correction[i].type_of_story == "video":
 				stories_correction[i].text = re.sub(re.escape("watch?v="), "embed/", stories_correction[i].text) 
