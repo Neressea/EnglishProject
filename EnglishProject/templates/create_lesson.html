@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+	{% if auth %}
+
+		<form method="post" action="/newlesson">
+			<fieldset class="form-group centerize"> 
+				<label for="title">Title</label>
+				<input class="form-control" type="text" name="title" value="{{title}}" placeholder="Title of your Lesson" required=""/>			
+				<label for="difficulty">Difficulty</label>
+				<select class="form-control" name="difficulty">
+					<option selected="selected" value="Easy">Easy</option>
+					<option value="Medium">Medium</option>
+					<option value="Hard">Hard</option>
+				</select>
+			</fieldset>
+
+			<div class="stories">
+			</div>
+			<br>
+			<a href="javascript:lastStory()" onclick="addAStory()">Add another story to the lesson</a>
+			<br>
+			<div class="error">{{error}}</div>
+			<br>
+			<button type="submit" class="btn btn-success" id="check-button"> Submit </button>
+		</form>
+	{% else %}
+		<p class="error">Vous n'êtes pas authentifié !</p>
+	{% endif %}
+
+	<script type="text/javascript">
+
+		function lastStory(){
+			var last = "#story" + $(".story").length;
+			$('html,body').animate({scrollTop: $(last).offset().top}, 'slow');
+		}
+
+		function changeTypeStory(number){
+			var type = $("#type_of_story"+number).find(":selected").val();
+			var block = $("#story_text"+number);
+			var content = block.val();
+
+			if(type == "video"){
+				block.replaceWith("<input type=\"text\" class=\"form-control\" name=\"story_text\" placeholder=\" Write or copy/paste the URL of youtube video\" id=\"story_text"+number+"\" value=\""+content+"\" required=\"\">");
+			}else{
+				block.replaceWith("<textarea class=\"form-control\" name=\"story_text\" placeholder=\" Write or copy/paste a story\" id=\"story_text"+number+"\" required=\"\">"+content+"</textarea>");
+			}
+
+			changeContent(number);
+			activateAreas(number);
+		}
+
+		function changeContent(number){
+			var type = $("#type_of_story"+number).find(":selected").val();
+			var prev = $("#preview"+number);
+			var content = $("#story_text"+number).val();
+			if(type == "video"){
+				content = content.replace("watch?v=", "embed/");
+				content = content.replace("://m.", "://www.");
+				content = content.replace("://youtu.be/", "://www.youtube.com/embed/");
+
+				prev.replaceWith("<iframe class=\"embed-responsive-item\" src=\""+content+"\" frameborder=\"0\" id=\"preview"+number+"\" width=\"480\" height=\"350\" allowfullscreen></iframe>");
+				$('#preview'+number).toggle().toggle();
+			}else{
+				content = content.replace(/\n/g, "<br />");
+				prev.replaceWith("<p align=\"justify\" id=\"preview"+number+"\">"+content+"</p>");
+			}
+		}
+
+		function addAStory(){
+			var number = $(".story").length + 1;
+
+			var newStory = "<div class=\"story bg-1\" id=\"story"+number+"\">\n"
+					+ "<input type=\"hidden\" name=\"num-story"+number+"\" value=\""+number+"\" />"
+					+"<h2>Story "+number+"</h2>\n"
+					+"<fieldset class=\"form-group centerize\">"
+						+"<label for=\"title_story"+number+"\"> Title </label>\n"
+						+"<input class=\"form-control\" type=\"text\" name=\"title_story"+number+"\" id=\"title_story"+number+"\" placeholder=\"Title of the story\" required=\"\"/>"
+						+"<label for=\"type_of_story"+number+"\">Type of story</label>"
+						+"<select class=\"form-control\" name=\"type_of_story"+number+"\" id=\"type_of_story"+number+"\" class=\"type_of_story\" onchange=\"changeTypeStory("+number+");\">"
+						+"<option value=\"text\" selected=\"selected\">Text</option>"
+						+"<option value=\"video\">Video</option>"
+						+"</select>"
+						+"<label for=\"story_text\">Content of the story</label>\n"
+						+"<textarea class=\"form-control\" name=\"story_text\" placeholder=\" Write or copy/paste a story\" id=\"story_text"+number+"\" required=\"\"></textarea>\n"
+						+"<label for=\"preview"+number+"\">Preview of the story</label>"
+						+"<div><p align=\"justify\" id=\"preview"+number+"\"\"></p></div>"
+					+"</fieldset>"
+					+"<div class=\"questions bg-2\">\n"
+						+"<h3>Questions</h3>\n"
+						+"<div class=\"vocabulary-questions\">\n"
+						+"<hr/>"
+						+	"<h4>Vocabulary questions</h4>\n"
+						+	"<p>Write your Gap-fill text here, the hidden words are surrounded by [hole] [/hole]"
+						+"</div>\n"
+						+"<hr width=\"30%\"/>"
+						+"<a href=\"#\" class=\"newVocabulary\" onclick=\"return false;\">Add a new vocabulary question</a>\n"
+						+"<div class=\"grammar-questions\">\n"
+						+"<hr/>"
+						+	"<h4>Grammar questions</h4>\n"
+						+	"<p>Write your question, write the correct answer and then wrong answers!</p>\n"
+						+"</div>"
+						+"<hr width=\"30%\"/>"
+						+"<a href=\"#\" class=\"newGrammar\" onclick=\"return false;\">Add a new grammar question</a>\n"
+						+"<div class=\"comprehension-questions\" onclick=\"return false;\">\n"
+						+"<hr/>"
+						+	"<h4>Comprehension questions</h4>\n"
+						+	"<p>Write your question and the answer you want. Think that the student has to find it exactly, so don't make it too tricky !</p>\n"
+						+"</div>\n"
+						+"<hr width=\"30%\"/>"
+						+"<a href=\"#\" class=\"newComprehension\" onclick=\"return false;\">Add a new comprehension question</a>\n"
+					+"</div>\n"
+				+"</div>\n";
+
+				$(".stories").append(newStory);
+
+				$("#story"+number).find(".newVocabulary").click(function () {
+		     		var num = $(this).closest('.story').find('h2').text().split(" ")[1];
+		     		addVocabularyQuest(num);
+				});
+
+				$("#story"+number).find(".newGrammar").click(function () {
+		     		var num = $(this).closest('.story').find('h2').text().split(" ")[1];
+		     		addGrammarQuest(num);
+				});
+
+				$("#story"+number).find(".newComprehension").click(function () {
+		     		var num = $(this).closest('.story').find('h2').text().split(" ")[1];
+		     		addComprehensionQuest(num);
+				});
+
+				$("#story"+number).find(".type_of_story").change(function(){
+					var choice = $("#story"+number).find(".type_of_story option:selected").val();
+					if(choice == "video"){
+						$("#story"+number).find("label[for='story"+number+"']").text("Video for the story (put a youtube link)");
+						var name_story = $("#story"+number).find("textarea[name=\"story_text\"]").attr('name');
+						var textbox = $(document.createElement('input')).attr('name', name_story);
+						$("#story"+number).find("textarea[name=\"story_text\"]").replaceWith(textbox);
+					}else{
+						$("#story"+number).find("label[for='story_text']").text("Text of the story");
+						var name_story = $("#story"+number).find("input[name=\"story_text\"]").attr('name');
+						var textbox = $(document.createElement('textarea')).attr('name', name_story);
+						$("#story"+number).find("input[name=\"story_text\"]").replaceWith(textbox);
+					}
+				});
+
+				//On ajoute un epremière question de chaque thème à la nouvelle histoire
+				addVocabularyQuest(number, false);
+				addGrammarQuest(number, false);
+				addComprehensionQuest(number, false);
+
+			    activateAreas(number);
+		}
+
+		function activateAreas(number){
+			$('#story_text' + number).keyup(function(){
+			    changeContent(number);
+		    });
+
+		    $('#story_text' + number).change(function(){
+		        changeContent(number);
+		    });
+		}
+
+		function addVocabularyQuest(num_story, scroll = true){
+			var number = $("#story"+num_story).find(".vocabulary-question").length + 1;
+
+			var id = "vocabulary-question"+num_story+""+number;
+
+			var newQuest = "<div class=\"vocabulary-question\" id=\""+id+"\">\n"
+				+"<hr width=\"10%\"/>"
+				+"<fieldset class=\"form-group centerize\">"
+				+ "<label for=\"vocabulary-question"+num_story+"\"> Question "+number+" :</label>\n"
+				+ "<textarea class=\"vocabulary-text form-control\" name=\"vocabulary-question"+num_story+"\" placeholder=\"ex: If we are fast enough, we will [hole] meet [/hole] the deadline\" required=\"\"></textarea>\n"
+				+"</fieldset>"
+				+ "</div>\n";
+
+			$("#story"+num_story).find(".vocabulary-questions").append(newQuest);
+
+			if(scroll)
+				$('html,body').animate({scrollTop: $("#"+id).offset().top}, 'slow');
+		}
+
+		function addGrammarQuest(num_story, scroll = true){
+			var number = $("#story"+num_story).find(".grammar-question").length + 1;
+
+			var id = "grammar-question"+num_story+""+number;
+
+			var newQuest = "<div class=\"grammar-question\" id=\""+id+"\">\n"
+				+"<hr width=\"10%\"/>"
+				+"<fieldset class=\"form-group centerize\">"
+				+"<label for=\"\">The question : </label>"
+				+"<input class=\"form-control\" type=\"text\" name=\"grammar-question"+num_story+"\" placeholder=\"ex: This year, I have ___ responsibilities\" required=\"\"/><br />"
+				+"<label>The correct answer : </label>"
+				+"<input class=\"form-control\" type=\"text\" name=\"grammar-answer"+num_story+""+number+"\" placeholder=\"ex: taken\" required=\"\"/><br />\n"
+				+"<label>A wrong answer : </label>"
+				+"<input class=\"form-control\" type=\"text\" name=\"grammar-answer"+num_story+""+number+"\" placeholder=\"ex: took\" required=\"\"/><br />\n"
+				+"<label>A wrong answer : </label>"
+				+"<input class=\"form-control\" type=\"text\" name=\"grammar-answer"+num_story+""+number+"\" placeholder=\"ex: taked\" required=\"\"/><br />\n"
+				+"<label>A wrong answer : </label>"
+				+"<input class=\"form-control\" type=\"text\" name=\"grammar-answer"+num_story+""+number+"\" placeholder=\"ex: take\" required=\"\"/><br />\n"
+				+"</fieldset>"
+				+"</div>\n";
+
+			$("#story"+num_story).find(".grammar-questions").append(newQuest);
+
+			if(scroll)
+				$('html,body').animate({scrollTop: $("#"+id).offset().top}, 'slow');
+		}
+
+		function addComprehensionQuest(num_story, scroll = true){
+			var number = $("#story"+num_story).find(".comprehension-question").length + 1;
+
+			var id = "comprehension-question"+num_story+""+number;
+
+			var newQuest = "<div class=\"comprehension-question\" id=\""+id+"\">\n"
+				+"<hr width=\"10%\"/>"
+				+"<fieldset class=\"form-group centerize\">"
+				+"<label for=\"comprehension-question"+num_story+"\"> Question "+number+"</label>\n"
+				+"<input class=\"form-control\" type=\"text\" name=\"comprehension-question"+num_story+"\" placeholder=\"ex: Who invented the zipper ? \" required=\"\"/>\n"
+				+"<label for=\"comprehension-answer"+num_story+"\">The answer</label>"
+				+"<input class=\"form-control\" type=\"text\" name=\"comprehension-answer"+num_story+"\" placeholder=\"ex: Gideon Sundback\" required=\"\"/>\n"
+				+"</fieldset>"
+				+"</div>\n";
+
+			$("#story"+num_story).find(".comprehension-questions").append(newQuest);
+
+			if(scroll)
+				$('html,body').animate({scrollTop: $("#"+id).offset().top}, 'slow');
+		}
+
+		//On ajoute la première histoire de la page
+		addAStory();
+
+	</script>
+
+{% endblock %}
